@@ -184,6 +184,88 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
 .ket{font-size:13.5px;color:var(--muted)}
 #v-excel .card p{color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* ringkasan pengajuan (modern) */
+.rv{display:flex;flex-direction:column;gap:14px}
+.rv-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.rv-tile{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.rv-tile span{font-size:12.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.rv-tile b{font-size:18px;line-height:1.25} .rv-tile small{font-size:12.5px;color:var(--muted)}
+.rv-tile.ok{border-left-color:var(--ok)} .rv-tile.warn{border-left-color:var(--warn)} .rv-tile.bad{border-left-color:var(--bad)} .rv-tile.bad b{color:var(--bad)}
+.rv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px;align-items:start}
+.rv-card.full{grid-column:1/-1}
+.rv-card h4{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin:0 0 6px}
+.rv-kv{display:grid;grid-template-columns:minmax(130px,38%) 1fr;gap:6px 14px;margin:0;font-size:14.5px}
+.rv-kv dt{color:var(--muted)} .rv-kv dd{margin:0;font-weight:500}
+.rv-kosong{color:var(--warn);font-style:italic;font-weight:400;font-size:13.5px;margin:0}
+table.rv-t{font-size:14px} table.rv-t td{padding:5px 4px;border-bottom:1px dashed var(--line)} table.rv-t th{padding:5px 4px}
+table.rv-t tr.tot td{border-top:1px solid var(--ink);border-bottom:0;font-weight:700}
+.rv-banding th.on{color:var(--accent);background:var(--accent-soft)}
+.rv-dua{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 20px}
+.rv-hasil{margin-top:10px;padding:9px 12px;border-radius:8px;font-size:14.5px} .rv-hasil.ok{background:var(--ok-soft)} .rv-hasil.bad{background:var(--bad-soft);color:var(--bad)}
+.rv-seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.rv-seg button{border:0;background:var(--surface);padding:7px 14px;font-weight:600;cursor:pointer;font-size:14px;color:var(--muted)}
+.rv-seg button[aria-selected="true"]{background:var(--accent);color:#fff}
+.rv-jadwal{max-height:440px} .rv-jadwal thead th{position:sticky;top:0;z-index:1}
+.rv-cetak .row{flex-wrap:wrap;gap:8px}
+#cetakArea{display:none}
+/* ===== tema modern ===== */
+:root{ --bg:#edf2ef; --line:#dbe3df; --ink:#13201b; --muted:#5f6e67; --ro:#f1f5f3;
+  --accent:#0e4d3d; --accent-strong:#093b2f; --accent-soft:#e2eee8; --info:#1f6fb2; --warn:#a2650a; --warn-soft:#fdf1dc;
+  --font:"Segoe UI Variable Text","Segoe UI",Roboto,"Noto Sans",system-ui,sans-serif; --r:14px; }
+html,body{font-size:15px;-webkit-font-smoothing:antialiased}
+h2{font-size:24px;font-weight:700;letter-spacing:-.01em} h3{font-size:16px;font-weight:650}
+h4{text-transform:none;letter-spacing:0;font-size:13.5px;font-weight:650}
+th{text-transform:none;letter-spacing:0;font-size:12.5px;background:var(--ro)}
+nav.menu .grp{text-transform:none;letter-spacing:0;font-size:12.5px;padding:16px 12px 6px}
+header.top{border-bottom:0;box-shadow:0 1px 0 var(--line)}
+.top-in{padding:10px 20px}
+.top-in .kop{color:var(--muted);font-weight:600;letter-spacing:0;font-size:12.5px}
+.top-in .kop::before{content:"SJ";display:inline-grid;place-items:center;width:22px;height:22px;margin-right:8px;border-radius:6px;background:var(--accent);color:#fff;font-size:10.5px;font-weight:800;vertical-align:-6px}
+.top-in .kantor{font-size:17px;font-weight:700;padding-left:30px}
+.pill{background:#fff;border:1px solid var(--line);font-weight:600}
+.pill.ok{background:#fff;border-color:#bfe0cc} .pill.role{background:var(--accent);color:#fff;border-color:var(--accent)}
+nav.menu{background:transparent;border-right:0;padding:14px 10px}
+nav.menu button{padding:10px 14px;border-radius:10px;font-weight:600;color:#33433c;position:relative}
+nav.menu button:hover{background:#e3ebe7}
+nav.menu button[aria-current="page"]{background:#fff;color:var(--accent);box-shadow:0 1px 2px rgba(14,77,61,.08),0 0 0 1px var(--line)}
+nav.menu button[aria-current="page"]::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:3px;background:var(--accent)}
+main{padding:22px 24px 70px}
+.card{border-radius:var(--r);border-color:var(--line);padding:18px 20px}
+.btn{border-radius:10px;border-color:#c7d2cc} .btn.small{border-radius:8px}
+.btn.primary{box-shadow:0 1px 2px rgba(14,77,61,.25)}
+input:not([type]),input[type=text],input[type=date],input[type=number],input[type=password],select,textarea{height:42px;border-radius:10px;border-color:#c9d4ce;padding:8px 12px}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 3px rgba(14,77,61,.15)}
+label.f{font-weight:600;color:#44544d}
+.tw{border-radius:12px}
+/* langkah: jalur kemajuan */
+.steps{gap:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px}
+.steps button{border:0;border-radius:9px;background:transparent;padding:8px 14px;color:var(--muted)}
+.steps button[aria-selected="true"]{background:var(--accent);color:#fff}
+.steps button[aria-selected="true"] b{background:#fff;color:var(--accent)}
+.steps button.done b{background:var(--ok);color:#fff}
+.guide{border-radius:12px}
+/* panel utama ringkasan */
+.rv-hero{background:var(--accent);color:#fff;border-radius:18px;padding:22px 24px;display:flex;flex-direction:column;gap:20px;
+  background-image:radial-gradient(120% 140% at 100% 0%,#1a6b55 0%,rgba(26,107,85,0) 55%)}
+.rv-hero-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 28px;align-items:end}
+.rv-nm{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.rv-sub{color:#bcd6cc;font-size:13.5px;margin-top:4px;display:flex;flex-wrap:wrap;gap:4px 16px} .rv-tuj{margin-top:8px;font-size:14px;color:#e5f0eb}
+.rv-amt{text-align:right} .rv-amt b{display:block;font-size:36px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.rv-amt small{color:#bcd6cc;font-size:13px}
+.rv-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:rgba(255,255,255,.14);border-radius:12px;overflow:hidden}
+.rv-stats>div{background:#0b4033;padding:12px 14px;display:flex;flex-direction:column;gap:3px}
+.rv-stats span{font-size:12.5px;color:#a9c9bd} .rv-stats b{font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rv-stats b.ok{color:#8fe0b4} .rv-stats b.warn{color:#ffd27a} .rv-stats b.bad{color:#ffab9e}
+.rv-stats small{font-size:12px;color:#a9c9bd}
+.rv-meter{display:block;position:relative;height:6px;border-radius:6px;background:rgba(255,255,255,.15);margin:3px 0 2px}
+.rv-meter>i{display:block;height:100%;border-radius:6px;background:#8fe0b4} .rv-meter>i.warn{background:#ffd27a} .rv-meter>i.bad{background:#ff8f7f}
+.rv-meter em{position:absolute;top:-3px;bottom:-3px;width:2px;background:#fff;opacity:.7}
+.rv-card{gap:14px} .rv-card .card-head h3{font-size:16px}
+.rv-kv dt{color:var(--muted);font-size:14px}
+.rv-hasil{border-radius:10px}
+.rv-cetak{background:#fff}
+@media (max-width:899px){ nav.menu{background:#fff} nav.menu button[aria-current="page"]::before{display:none} .rv-amt{text-align:left} .rv-hero-top{grid-template-columns:1fr} .rv-amt b{font-size:30px} main{padding:16px 12px 60px} }
+
 /* tampilan sheet seperti Excel */
 .xl-tabs{display:flex;gap:2px;overflow-x:auto;border-bottom:2px solid var(--accent);margin-bottom:10px}
 .xl-tabs button{border:1px solid var(--line);border-bottom:0;background:#eef1ef;padding:7px 14px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;border-radius:6px 6px 0 0;color:var(--muted)}
@@ -221,6 +303,7 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
 .xl-ttd{display:grid;grid-template-columns:1fr 1fr;text-align:center;margin-top:14px}
 .xl-ttd .garis{margin:56px auto 0;border-top:1px solid #000;width:60%;padding-top:2px}
 @media print{
+  body.cetak-xl > *:not(#cetakArea){display:none!important} body.cetak-xl #cetakArea{display:block!important}
   #v-pengajuan.cetak-dok > *:not(#s3), #v-pengajuan.cetak-dok #s3 > *:not(#docLive){display:none!important}
   .xl-wrap{border:0;overflow:visible} .xl{padding:0;min-width:0!important;max-width:none}
   .xl-pandu{display:block;min-width:0} body.cetak-pandu .xl-kanan{display:none}
@@ -298,7 +381,7 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
     <div class="steps" role="tablist" id="steps">
       <button type="button" role="tab" data-s="1" aria-selected="true"><b>1</b>Data pinjaman</button>
       <button type="button" role="tab" data-s="2" aria-selected="false"><b>2</b>Wawancara</button>
-      <button type="button" role="tab" data-s="3" aria-selected="false"><b>3</b>Form Pengajuan &amp; kirim</button>
+      <button type="button" role="tab" data-s="3" aria-selected="false"><b>3</b>Periksa &amp; kirim</button>
     </div>
   </div>
   <div class="guide" id="guide" role="status" aria-live="polite"></div>
@@ -361,7 +444,7 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
           <label class="f">Jumlah setoran ke-1<input id="rJml" class="ro num" readonly tabindex="-1"></label>
         </div>
         <p class="note" id="rCatatan"></p>
-        <details><summary>Tabel angsuran (sama seperti sheet Jadwal di Excel)</summary>
+        <details><summary>Tabel angsuran</summary>
           <div class="jadwal-head" id="jHead"></div>
           <div class="tw" style="margin-top:8px;max-height:420px"><table id="tAng" style="white-space:nowrap"><thead><tr><th class="r">No.</th><th>Tgl Setor</th><th>Keterangan</th><th class="r">AP</th><th class="r">Bunga</th><th class="r">Tab</th><th class="r">Jlh Setoran</th><th class="r">Saldo</th></tr></thead><tbody></tbody>
           <tfoot><tr><td></td><td colspan="2">Total</td><td class="r num" id="aPokok">0</td><td class="r num" id="aBunga">0</td><td class="r num" id="aTab">0</td><td class="r num" id="aJml">0</td><td></td></tr></tfoot></table></div>
@@ -426,12 +509,12 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
       <div class="card"><h3>Aset bersih</h3><table class="wt"><tr class="tot"><td>Aset dikurangi hutang</td><td><input id="w_asetbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
       <div class="card"><h3>Penghasilan bersih</h3><table class="wt"><tr class="tot"><td>Penghasilan dikurangi pengeluaran</td><td><input id="w_hasilbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
     </div>
-    <div class="row"><button class="btn" type="button" data-go="1">Kembali</button><span class="sp"></span><button class="btn primary" type="button" data-go="3" id="goS3">Lanjut ke Form Pengajuan</button></div>
+    <div class="row"><button class="btn" type="button" data-go="1">Kembali</button><span class="sp"></span><button class="btn primary" type="button" data-go="3" id="goS3">Lanjut ke Periksa &amp; kirim</button></div>
   </div>
 
   <!-- langkah 3 -->
   <div class="step" id="s3">
-    <p class="note">Form di bawah terisi otomatis dari data langkah 1 dan 2. Periksa dulu, lalu kirim.</p>
+    <p class="note">Ringkasan di bawah terisi otomatis dari langkah 1 dan 2. Bagian bertanda <i>Belum diisi</i> bisa dilengkapi lewat tombol Ubah.</p>
     <div id="docLive"></div>
     <div class="cols">
       <div class="card"><h3>Kelengkapan</h3><div class="cek" id="cekList"></div></div>
@@ -711,7 +794,7 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
 <dialog id="dlgDetail">
   <div class="dh" id="dTitle">Detail pengajuan</div>
   <div class="db" id="dBody"></div>
-  <div class="df"><button class="btn" type="button" id="dSalin">Salin baris (Excel)</button><button class="btn" type="button" id="dBerkas">Lihat &amp; cetak form</button><button class="btn" type="button" id="d5cBtn">Buka Analisis 5C</button><button class="btn primary" type="button" id="dTutup">Tutup</button></div>
+  <div class="df"><button class="btn" type="button" id="dSalin">Salin baris (Excel)</button><button class="btn" type="button" id="dBerkas">Lihat &amp; cetak berkas</button><button class="btn" type="button" id="d5cBtn">Buka Analisis 5C</button><button class="btn primary" type="button" id="dTutup">Tutup</button></div>
 </dialog>
 
 <dialog id="dlgTanya" style="width:440px">
@@ -721,6 +804,7 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
 </dialog>
 
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="cetakArea"></div>
 
 <script>
 "use strict";
@@ -1350,7 +1434,7 @@ function petunjuk(){
   var ok1=s1.every(function(x){ return x[1]; }), ok2=s2.every(function(x){ return x[1]; });
   var b=document.querySelectorAll("#steps button"); b[0].classList.toggle("done",ok1); b[1].classList.toggle("done",ok2);
   var g=$("guide"), kur=k.filter(function(x){ return !x[1]; });
-  if(!kur.length){ g.className="guide siap"; g.innerHTML="<span><b>Semua isian wajib lengkap.</b> Buka Form Pengajuan &amp; kirim, periksa form, lalu tekan Simpan dan kirim pengajuan.</span>"; }
+  if(!kur.length){ g.className="guide siap"; g.innerHTML="<span><b>Semua isian wajib lengkap.</b> Buka Periksa &amp; kirim, lalu tekan Simpan dan kirim pengajuan.</span>"; }
   else { var x=kur[0]; g.className="guide"; g.innerHTML="<span><b>Langkah berikutnya:</b> "+esc(x[0].charAt(0).toLowerCase()+x[0].slice(1))+" (langkah "+x[2]+"). Masih kurang "+kur.length+" isian.</span><button class='btn small' type='button' id='gGo'>Ke isian itu</button>";
     $("gGo").onclick=function(){ bukaStep(x[2]); var el=$(x[3]); if(el){ el.focus(); el.scrollIntoView({block:"center"}); } }; }
 }
@@ -1476,9 +1560,9 @@ function dokPandu(p){
   var kiri="<table class='xt'><colgroup><col style='width:30px'><col style='width:175px'><col style='width:12px'><col><col><col></colgroup>"+
     "<tr><th colspan='6' class='biru besar'>DATA ANGGOTA</th></tr>"+
     "<tr><td class='c'>1</td><td>Nama</td><td>:</td><td colspan='3' class='isi'>"+xt(a.nama)+"</td></tr>"+
-    "<tr><td class='c'>2</td><td>BA</td><td>:</td><td colspan='3' class='isi'>"+xt(a.no_ba||"(belum punya No BA)")+"</td></tr>"+
+    "<tr><td class='c'>2</td><td>BA</td><td>:</td><td colspan='3' class='isi'>"+xt(a.no_ba||(a.anggota_baru?"(belum punya No BA)":""))+"</td></tr>"+
     "<tr><td class='c'>2</td><td>Alamat</td><td>:</td><td colspan='3' class='isi'></td></tr>"+
-    "<tr><td class='c'>3</td><td>Jumlah Pengajuan</td><td>:</td><td class='isi r'>"+rp(p.jumlah)+"</td><td colspan='2' class='kecil'>"+xt(p.terbilang)+"</td></tr>"+
+    "<tr><td class='c'>3</td><td>Jumlah Pengajuan</td><td>:</td><td class='isi r'>"+rp(p.jumlah)+"</td><td colspan='2' class='kecil'>"+xt(p.terbilang||terbilang(p.jumlah))+"</td></tr>"+
     "<tr><td class='c'>4</td><td>Tujuan Pinjaman</td><td>:</td><td colspan='3' class='isi miring'>"+xt(p.tujuan)+"</td></tr>"+
     "<tr><td class='c'>5</td><td>Jangka waktu</td><td>:</td><td class='isi c'>"+xt(p.jangka_bulan)+"</td><td>Bulan/</td><td>"+thn+" Tahun</td></tr>"+
     "<tr><td class='c' rowspan='3'>6</td><td rowspan='3' class='c'>Modal</td><td rowspan='3'></td><td class='isi c'>Saham</td><td class='isi r' colspan='2'>"+xa(m.saham)+"</td></tr>"+
@@ -1541,7 +1625,7 @@ function lapAset(p){
       "<tr><td></td><td></td><td></td><td></td><td><b>"+lblBersih+"</b></td><td class='r'><b>"+(bersih<0?"("+rp(-bersih)+")":xa(bersih))+"</b></td></tr></table>";
   }
   return "<div class='xl-judul2'>LAPORAN ASET DAN PENGHASILAN</div>"+
-    "<table class='xt nol'><colgroup><col style='width:160px'><col style='width:12px'><col></colgroup><tr><td>Nama Lengkap</td><td>:</td><td>"+xt(a.nama)+"</td></tr><tr><td>No. BA</td><td>:</td><td>"+xt(a.no_ba)+"</td></tr><tr><td>Jumlah Pengajuan</td><td>:</td><td>Rp "+rp(p.jumlah)+" <span class='kecil'>("+xt(p.terbilang)+")</span></td></tr></table>"+
+    "<table class='xt nol'><colgroup><col style='width:160px'><col style='width:12px'><col></colgroup><tr><td>Nama Lengkap</td><td>:</td><td>"+xt(a.nama)+"</td></tr><tr><td>No. BA</td><td>:</td><td>"+xt(a.no_ba)+"</td></tr><tr><td>Jumlah Pengajuan</td><td>:</td><td>Rp "+rp(p.jumlah)+" <span class='kecil'>("+xt(p.terbilang||terbilang(p.jumlah))+")</span></td></tr></table>"+
     dua("Aset","Hutang","Saldo",asR,htR,t.aset,t.hutang,"Aset Bersih",t.aset_bersih)+
     "<div style='height:10px'></div>"+
     dua("PENGHASILAN","PENGELUARAN","Sebulan Rp",pgR,pkR,t.penghasilan,t.pengeluaran,"Penghasilan Bersih",t.penghasilan_bersih);
@@ -1566,13 +1650,13 @@ function dokForm(p){
   var col="<colgroup><col style='width:34px'><col style='width:42%'><col style='width:34px'><col></colgroup>";
   var atas="<table class='xt'><colgroup><col style='width:30px'><col style='width:22%'><col style='width:12px'><col style='width:28%'><col style='width:20%'><col style='width:12px'><col></colgroup>"+
     "<tr><td colspan='7' class='abu'><b>1. DATA PERMOHONAN PINJAMAN</b></td></tr>"+
-    [[1,"Nama",xt(a.nama),"No. BA",xt(a.no_ba||"(belum punya No BA)")],
+    [[1,"Nama",xt(a.nama),"No. BA",xt(a.no_ba||(a.anggota_baru?"(belum punya No BA)":""))],
      [2,"Tanggal Mengajukan  Pinjaman",tglHari(tg),"Tgl Jadi Anggota",tglPanjang(dateOf(a.tgl_jadi_anggota))],
-     [3,"Jumlah Pinjaman yang diajukan","Rp "+rp(p.jumlah),"Lama Menjadi anggota",xt(p.lama_anggota)],
-     [4,"Terbilang","<span class='miring'>"+xt(p.terbilang)+"</span>","Kode Pinjaman","P. "+esc(kodeP(p))],
+     [3,"Jumlah Pinjaman yang diajukan",p.jumlah?"Rp "+rp(p.jumlah):"","Lama Menjadi anggota",xt(p.lama_anggota)],
+     [4,"Terbilang","<span class='miring'>"+xt(p.terbilang||terbilang(p.jumlah))+"</span>","Kode Pinjaman",kodeP(p)?"P. "+esc(kodeP(p)):""],
      [5,"Tujuan Pinjaman",xt(p.tujuan),"Jenis Pinjaman",xt(jp.nama)],
-     [6,"Suku Bunga",persen(p.suku_bunga_persen_per_bulan)+" "+xt((p.cara_pembayaran||{}).nama),"Pinjaman yang ke",xt(p.pinjaman_ke)],
-     [7,"Lama Pengembalian Pinjaman",xt(p.jangka_bulan)+" Bulan/ "+thn+" Tahun",""]]
+     [6,"Suku Bunga",(p.suku_bunga_persen_per_bulan?persen(p.suku_bunga_persen_per_bulan):"")+" "+xt((p.cara_pembayaran||{}).nama),"Pinjaman yang ke",xt(p.pinjaman_ke)],
+     [7,"Lama Pengembalian Pinjaman",p.jangka_bulan?xt(p.jangka_bulan)+" Bulan/ "+thn+" Tahun":"",""]]
     .map(function(x){ return "<tr><td class='c'>"+x[0]+"</td><td>"+x[1]+"</td><td>:</td><td>"+x[2]+"</td><td>"+(x[3]||"")+"</td><td>"+(x[3]?":":"")+"</td><td>"+(x[4]||"")+"</td></tr>"; }).join("")+"</table>";
   var idn=[["Nama Lengkap",xt(a.nama)],["Nama panggilan/ Alias",xt((a.nama||"").toUpperCase())],["Jenis Kelamin",""],["Tempat, Tgl. Lahir",db.l?tglPanjang(dateOf(db.l)):""],["Nomor KTP",""],["No.Telepon/HP",""],["No NPWP",""],["Pekerjaan",""],["Alamat Sekarang",""],["Jalan",""],["Gang",""],["Desa",""],["Kecamatan",""],["Kabupaten",""],["Propinsi",""],["Status",""],["Nama Ibu",""],["Nama suami/istri",""],["Pekerjaansuami/istri",""],["Jumlah Tanggungan",(w.tanggungan!=null?w.tanggungan:"")+" Orang"]];
   var kiri="<table class='xt'>"+col+bar("2. IDENTITAS PEMOHON  :")+idn.map(function(x,i){ return kv(i+1,x[0],x[1]); }).join("")+
@@ -1624,25 +1708,115 @@ function jadwalXl(p,met){
   return "<div class='xl-wrap'><div class='xl xl-jadwal'><div class='xl-judul2'>TABEL ANGSURAN</div>"+kepala+"<table class='xt jd'>"+h+"</table></div></div>";
 }
 
-var DOKTAB={docLive:"form",docBerkas:"form"};
-function berkasHtml(target,p){
-  var t=DOKTAB[target];
-  var tabs="<div class='xl-tabs noprint' role='tablist'>"+DOK.map(function(d){ return "<button type='button' role='tab' data-t='"+d[0]+"' aria-selected='"+(d[0]===t)+"'>"+d[1]+"</button>"; }).join("")+"</div>";
-  var isi=t==="pandu"?dokPandu(p):t==="form"?dokForm(p):t==="aset"?"<div class='xl-wrap'><div class='xl xl-aset'>"+lapAset(p)+"</div></div>":jadwalXl(p,t==="annu"?"annuitas":"menurun");
-  var bar=isAdmin()?"<div class='row noprint' style='margin-bottom:8px'><span class='sp'></span><button class='btn' type='button' data-cetak='1'>Cetak sheet ini</button></div>":"";
-  return tabs+bar+isi;
+/* ---------- Ringkasan pengajuan (tampilan modern). Cetak tetap memakai format Excel di atas. ---------- */
+var CETAK=[["form","Formulir Permohonan Kredit"],["pandu","Panduan Wawancara"],["aset","Laporan Aset & Penghasilan"],["annu","Jadwal Annuitas"],["menu","Jadwal Angsuran Menurun"]];
+var RVJAD={docLive:"",docBerkas:""};
+function rvJml(rows){ return rows.reduce(function(s,r){ return s+(r[1]||0); },0); }
+function rvList(rows,total,lblTotal){
+  var isi=rows.filter(function(r){ return r[1]; });
+  return isi.length?"<table class='rv-t'>"+isi.map(function(r){ return "<tr><td>"+esc(r[0])+"</td><td class='r num'>"+rp(r[1])+"</td></tr>"; }).join("")+
+    "<tr class='tot'><td>"+(lblTotal||"Jumlah")+"</td><td class='r num'>"+rp(total==null?rvJml(isi):total)+"</td></tr></table>":"<p class='rv-kosong'>Belum diisi</p>";
 }
-function renderLive(){ var el=$("docLive"); if(!el) return; el.innerHTML=(S.anggota||numOf($("fJumlah")))?berkasHtml("docLive",buatPayload()):"<div class='card empty'>Isi data pinjaman dan wawancara dulu, form akan terisi otomatis.</div>"; }
+function rvKv(pairs){ return "<dl class='rv-kv'>"+pairs.map(function(x){ var v=x[1]; return "<dt>"+esc(x[0])+"</dt><dd>"+(v===""||v==null?"<span class='rv-kosong'>Belum diisi</span>":esc(v))+"</dd>"; }).join("")+"</dl>"; }
+function rvKartu(judul,isi,ubah,live,ekstra){ return "<section class='card rv-card"+(ekstra?" "+ekstra:"")+"'><div class='card-head'><h3>"+judul+"</h3>"+(live&&ubah?"<button class='btn small' type='button' data-ubah='"+ubah+"'>Ubah</button>":"")+"</div>"+isi+"</section>"; }
+function rvTile(label,nilai,ket,kelas){ return "<div class='rv-tile "+(kelas||"")+"'><span>"+label+"</span><b>"+nilai+"</b>"+(ket?"<small>"+ket+"</small>":"")+"</div>"; }
+function totalBunga(p,met){ var n=p.jangka_bulan, r=(p.suku_bunga_persen_per_bulan||0)/100; return bangunJadwal(p.jumlah,n,r,met,0,new Date()).reduce(function(s,x){ return s+x.bunga; },0); }
+
+function ringkasan(p,target){
+  var live=target==="docLive", w=p.wawancara||{}, a=p.anggota||{}, m=w.modal||{}, j=w.jaminan||{}, t=w.total||{}, pl=p.plafon||{}, c=p.rincian||{}, pj=w.penjamin||{};
+  var met=(p.cara_pembayaran||{}).metode||"", namaCara=(p.cara_pembayaran||{}).nama||"";
+  var modal=(m.saham||0)+(m.taman||0), seharusnya=pl.persen?p.jumlah*pl.persen/100:0, kurang=modal-seharusnya;
+  var peng=t.penghasilan||0, angs=c.jumlah||0, dsr=peng>0&&angs?angs/peng*100:null;
+  var adm=Math.round(p.jumlah*((P.administrasiPersen==null?2:P.administrasiPersen)/100)), lama=p.total_saldo_berjalan||0, tung=w.tunggakan_bunga||0, terima=p.jumlah-adm-lama-tung;
+  var siap=p.jumlah&&p.jangka_bulan&&met;
+
+  /* panel utama */
+  var lim=(SET5C_STD.aturan||{}).dsr||50, dsrW=dsr==null?0:Math.min(100,dsr/(lim*1.5)*100), dsrK=dsr==null?"":dsr<=30?"ok":dsr<=lim?"warn":"bad";
+  var sub=[a.no_ba||(a.anggota_baru?"Anggota baru":""),p.lama_anggota?"anggota "+p.lama_anggota.toLowerCase():"",(p.jenis_pinjaman||{}).nama||""].filter(function(x){ return x; }).map(function(x){ return "<span>"+esc(x)+"</span>"; }).join("");
+  var tiles="<section class='rv-hero'>"+
+    "<div class='rv-hero-top'><div><div class='rv-nm'>"+(a.nama?esc(a.nama):"Anggota belum dipilih")+"</div><div class='rv-sub'>"+(sub||"<span>Pilih anggota di langkah 1</span>")+"</div>"+(p.tujuan?"<div class='rv-tuj'>"+esc(p.tujuan)+"</div>":"")+"</div>"+
+      "<div class='rv-amt'><b>"+(p.jumlah?"Rp "+rp(p.jumlah):"Rp –")+"</b><small>"+esc(p.jumlah?(p.terbilang||terbilang(p.jumlah)):"jumlah belum diisi")+"</small></div></div>"+
+    "<div class='rv-stats'>"+
+      "<div><span>Setoran per bulan</span><b>"+(angs?"Rp "+rp(angs):"–")+"</b><small>"+(angs?(met==="annuitas"?"sama setiap bulan":met==="menurun"?"bulan pertama, lalu turun":esc(namaCara)):"")+(p.jangka_bulan?" · "+p.jangka_bulan+" bulan":"")+"</small></div>"+
+      "<div><span>Rasio angsuran</span><b class='"+dsrK+"'>"+(dsr==null?"–":pct1(dsr))+"</b><i class='rv-meter'><i class='"+dsrK+"' style='width:"+dsrW.toFixed(0)+"%'></i><em style='left:"+(100/1.5).toFixed(1)+"%'></em></i><small>"+(dsr==null?"isi penghasilan dulu":"batas "+lim+"% dari penghasilan")+"</small></div>"+
+      "<div><span>Modal terhadap plafon</span><b class='"+(pl.persen?(kurang<0?"bad":"ok"):"")+"'>"+(pl.persen?(kurang<0?"Kurang Rp "+rp(-kurang):"Cukup"):"–")+"</b><small>"+(pl.persen?"punya "+rpp(modal)+", perlu "+rpp(seharusnya):"isi plafon %")+"</small></div>"+
+      "<div><span>Dana diterima</span><b>"+(p.jumlah?"Rp "+rp(terima):"–")+"</b><small>"+(p.jumlah?"setelah potongan administrasi"+(lama?" dan pinjaman lama":""):"")+"</small></div>"+
+    "</div></section>";
+
+  var data=rvKartu("Data permohonan",rvKv([["Nama",a.nama],["No. BA",a.no_ba||(a.anggota_baru?"Anggota baru (belum punya No BA)":"")],["Lama menjadi anggota",p.lama_anggota],["Tanggal mengajukan",p.tgl_pengajuan?tglHari(dateOf(p.tgl_pengajuan)):""],
+    ["Tujuan pinjaman",p.tujuan],["Jenis pinjaman",(p.jenis_pinjaman||{}).nama],["Pinjaman yang ke",p.pinjaman_ke],["Cara pembayaran",namaCara],["Jangka waktu",p.jangka_bulan?p.jangka_bulan+" bulan ("+String(Math.round(p.jangka_bulan/12*10)/10).replace(".",",")+" tahun)":""],
+    ["Suku bunga",p.suku_bunga_persen_per_bulan?persen(p.suku_bunga_persen_per_bulan)+" per bulan":""]]),"1:fJumlah",live);
+
+  /* perbandingan cara bayar */
+  var rc=rincianDua(p), bm=siap?totalBunga(p,"menurun"):0, ba=siap?totalBunga(p,"annuitas"):0;
+  var banding=p.jumlah&&p.jangka_bulan?"<table class='rv-t rv-banding'><thead><tr><th></th><th class='r"+(met==="menurun"?" on":"")+"'>Menurun</th><th class='r"+(met==="annuitas"?" on":"")+"'>Annuitas</th></tr></thead><tbody>"+
+    "<tr><td>Angsuran pokok ke-1</td><td class='r num'>"+rp(rc.m.pokok)+"</td><td class='r num'>"+rp(rc.a.pokok)+"</td></tr>"+
+    "<tr><td>Bunga ke-1</td><td class='r num'>"+rp(rc.m.bunga)+"</td><td class='r num'>"+rp(rc.a.bunga)+"</td></tr>"+
+    "<tr><td>Tabungan per bulan</td><td class='r num'>"+rp(rc.tab)+"</td><td class='r num'>"+rp(rc.tab)+"</td></tr>"+
+    "<tr class='tot'><td>Setoran bulan ke-1</td><td class='r num'>"+rp(rc.m.jml)+"</td><td class='r num'>"+rp(rc.a.jml)+"</td></tr>"+
+    "<tr><td>Total bunga selama "+p.jangka_bulan+" bulan</td><td class='r num'>"+rp(bm)+"</td><td class='r num'>"+rp(ba)+"</td></tr></tbody></table>"+
+    (bm&&ba?"<p class='note'>"+(bm<ba?"Menurun lebih hemat bunga Rp "+rp(ba-bm)+", tetapi setoran awalnya lebih besar.":"Annuitas lebih hemat bunga Rp "+rp(bm-ba)+".")+"</p>":"")
+    :"<p class='rv-kosong'>Isi jumlah, jangka waktu, dan suku bunga.</p>";
+  var kartuBanding=rvKartu("Angsuran: Menurun dan Annuitas",banding,"1:fJangka",live);
+
+  var kartuModal=rvKartu("Modal dan dana diterima",rvKv([["Saham","Rp "+rp(m.saham)],["Taman","Rp "+rp(m.taman)],["Jumlah modal","Rp "+rp(modal)],["Modal seharusnya",pl.persen?persen(pl.persen)+" × jumlah = Rp "+rp(seharusnya):""],["Kekurangan / kelebihan",pl.persen?(kurang<0?"− Rp "+rp(-kurang):"+ Rp "+rp(kurang)):""]])+
+    "<table class='rv-t' style='margin-top:10px'><tr><td>Jumlah pinjaman</td><td class='r num'>"+rp(p.jumlah)+"</td></tr><tr><td>Administrasi "+persen((P.administrasiPersen==null?2:P.administrasiPersen))+"</td><td class='r num'>− "+rp(adm)+"</td></tr>"+
+    (lama?"<tr><td>Pelunasan pinjaman lama</td><td class='r num'>− "+rp(lama)+"</td></tr>":"")+(tung?"<tr><td>Tunggakan bunga</td><td class='r num'>− "+rp(tung)+"</td></tr>":"")+
+    "<tr class='tot'><td>Diterima / Pasimpong</td><td class='r num'>"+rp(terima)+"</td></tr></table>","1:w_saham",live);
+
+  var pgR=WAW.pg.map(function(r){ return [r[1],(w.penghasilan||{})[r[0]]]; }), pkR=WAW.pk.map(function(r){ return [r[1],(w.pengeluaran||{})[r[0]]]; });
+  var asR=[["Tabungan di CU SJ (saham + taman)",modal]].concat(WAW.as.map(function(r){ return [r[1],(w.aset||{})[r[0]]]; }));
+  var htR=[["Saldo pinjaman di CU (berjalan)",lama]].concat(WAW.ht.map(function(r){ return [r[1],(w.hutang||{})[r[0]]]; }));
+  var bersih=t.penghasilan_bersih||0, asb=t.aset_bersih||0;
+  var kartuUang=rvKartu("Penghasilan dan pengeluaran per bulan","<div class='rv-dua'><div><h4>Penghasilan</h4>"+rvList(pgR,t.penghasilan)+"</div><div><h4>Pengeluaran</h4>"+rvList(pkR,t.pengeluaran)+"</div></div>"+
+    "<div class='rv-hasil "+(bersih<0?"bad":"ok")+"'>Penghasilan bersih <b>Rp "+(bersih<0?"−"+rp(-bersih):rp(bersih))+"</b>"+(angs?" · sisa setelah angsuran baru <b>Rp "+rp(bersih-angs)+"</b>":"")+"</div>","2:#blok:pg",live);
+  var kartuAset=rvKartu("Aset dan hutang","<div class='rv-dua'><div><h4>Aset</h4>"+rvList(asR,t.aset)+"</div><div><h4>Hutang</h4>"+rvList(htR,t.hutang)+"</div></div>"+
+    "<div class='rv-hasil "+(asb<0?"bad":"ok")+"'>Aset bersih <b>Rp "+(asb<0?"−"+rp(-asb):rp(asb))+"</b></div>","2:#blok:as",live);
+  var cak=j.nilai_taksiran&&p.jumlah?Math.round(j.nilai_taksiran/p.jumlah*100):null;
+  var kartuJam=rvKartu("Jaminan",rvKv([["Simpanan atas nama",a.nama?a.nama+(a.no_ba?" · "+a.no_ba:""):""],["Simpanan penjamin",pj.nama?pj.nama+" · "+pj.no_ba:"Tidak ada"],["Barang jaminan",j.nama_barang],["Bukti kepemilikan",j.legalitas],["Atas nama",j.atas_nama?j.atas_nama+(j.hubungan?" ("+j.hubungan+")":""):""],
+    ["No. SKT / sertifikat",j.nomor],["Luas",j.luas?j.luas+" m²":""],["Jarak dari jalan utama",j.jarak],["Batas",[["U",j.batas_utara],["S",j.batas_selatan],["B",j.batas_barat],["T",j.batas_timur]].filter(function(x){ return x[1]; }).map(function(x){ return x[0]+": "+x[1]; }).join(" · ")],
+    ["Nilai taksiran",j.nilai_taksiran?"Rp "+rp(j.nilai_taksiran)+(cak!=null?" ("+cak+"% dari pinjaman)":""):""]]),"2:j_nama",live);
+  var kartuKel=rvKartu("Keluarga dan pinjaman lain",rvKv([["Jumlah tanggungan",w.tanggungan!=null?w.tanggungan+" orang":""],["Pinjaman berjalan",(p.pinjaman_berjalan||[]).length?(p.pinjaman_berjalan.length+" pinjaman · saldo Rp "+rp(lama)):"Tidak ada"],["Tunggakan bunga","Rp "+rp(tung)],["Pinjaman di tempat lain","Rp "+rp(((w.hutang||{}).cu_lain||0)+((w.hutang||{}).bank||0))]]),"2:w_tanggungan",live);
+
+  /* jadwal angsuran */
+  var mj=RVJAD[target]||met||"annuitas", rows=siap?bangunJadwal(p.jumlah,p.jangka_bulan,(p.suku_bunga_persen_per_bulan||0)/100,mj,c.tabungan||0,dateOf(p.tgl_pengajuan)||new Date()):[], sal=p.jumlah, tp=0,tb=0,tt=0,tj=0;
+  var jad=siap?"<div class='rv-seg' role='tablist'>"+[["menurun","Menurun"],["annuitas","Annuitas"]].concat(met==="flat"?[["flat","Flat"]]:[]).map(function(x){ return "<button type='button' data-jad='"+x[0]+"' aria-selected='"+(x[0]===mj)+"'>"+x[1]+(x[0]===met?" (dipilih)":"")+"</button>"; }).join("")+"</div>"+
+    "<div class='tw rv-jadwal'><table><thead><tr><th class='r'>Ke</th><th>Tgl setor</th><th class='r'>Pokok</th><th class='r'>Bunga</th><th class='r'>Tabungan</th><th class='r'>Setoran</th><th class='r'>Sisa pinjaman</th></tr></thead><tbody>"+
+    rows.map(function(x){ sal-=x.pokok; tp+=x.pokok; tb+=x.bunga; tt+=x.tab; tj+=x.jml; return "<tr><td class='r'>"+x.ke+"</td><td>"+tglPendek(x.tgl)+"</td><td class='r num'>"+rp(x.pokok)+"</td><td class='r num'>"+rp(x.bunga)+"</td><td class='r num'>"+rp(x.tab)+"</td><td class='r num'>"+rp(x.jml)+"</td><td class='r num'>"+rp(Math.max(0,sal))+"</td></tr>"; }).join("")+
+    "</tbody><tfoot><tr><td></td><td>Total</td><td class='r num'>"+rp(tp)+"</td><td class='r num'>"+rp(tb)+"</td><td class='r num'>"+rp(tt)+"</td><td class='r num'>"+rp(tj)+"</td><td></td></tr></tfoot></table></div>"
+    :"<p class='rv-kosong'>Isi jumlah, jangka waktu, suku bunga, dan cara pembayaran.</p>";
+  var kartuJad=rvKartu("Jadwal angsuran",jad,"1:fJangka",live,"full");
+
+  return "<div class='rv'>"+tiles+"<div class='rv-grid'>"+data+kartuBanding+kartuModal+kartuKel+kartuUang+kartuAset+kartuJam+kartuJad+"</div></div>";
+}
+
+function berkasHtml(target,p){
+  var cetak=isAdmin()?"<div class='card rv-cetak noprint'><div class='card-head'><h3>Cetak berkas</h3><span class='note'>Hasil cetak memakai format resmi seperti di Excel.</span></div><div class='row'>"+
+    CETAK.map(function(x){ return "<button class='btn' type='button' data-cetak='"+x[0]+"'>"+x[1]+"</button>"; }).join("")+"</div></div>":"";
+  return cetak+ringkasan(p,target);
+}
+function renderLive(){ var el=$("docLive"); if(el) el.innerHTML=berkasHtml("docLive",buatPayload()); }
 function renderBerkas(){
   var b=S.berkas; if(!b||!b.p){ buka(isAdmin()?"impor":"pengajuan"); return; }
-  $("bJudul").textContent="Form pengajuan · "+((b.p.anggota||{}).nama||"");
+  $("bJudul").textContent="Pengajuan · "+((b.p.anggota||{}).nama||"");
   $("docBerkas").innerHTML=berkasHtml("docBerkas",b.p);
 }
+function cetakXl(jenis,p){
+  var a=$("cetakArea");
+  a.innerHTML=jenis==="pandu"?dokPandu(p):jenis==="form"?dokForm(p):jenis==="aset"?"<div class='xl-wrap'><div class='xl xl-aset'>"+lapAset(p)+"</div></div>":jadwalXl(p,jenis==="annu"?"annuitas":"menurun");
+  document.body.classList.add("cetak-xl"); document.body.classList.toggle("cetak-pandu",jenis==="pandu");
+  try{ window.print(); }catch(er){ toast("Cetak tidak tersedia di sini.","bad"); }
+}
+window.addEventListener("afterprint",function(){ document.body.classList.remove("cetak-xl","cetak-pandu"); });
 $("bKembali").addEventListener("click",function(){ var b=S.berkas||{}; if(b.dari==="impor"){ buka("impor"); } else { buka("pengajuan"); bukaStep(3); } });
 ["docLive","docBerkas"].forEach(function(id){ $(id).addEventListener("click",function(e){
-  var b=e.target.closest("button[data-t]");
-  if(b){ DOKTAB[id]=b.dataset.t; if(id==="docLive") renderLive(); else renderBerkas(); return; }
-  if(e.target.closest("button[data-cetak]")){ var vw=$(id==="docLive"?"v-pengajuan":"v-berkas"); vw.classList.add("cetak","cetak-dok"); document.body.classList.toggle("cetak-pandu",DOKTAB[id]==="pandu"); try{ window.print(); }catch(er){ toast("Cetak tidak tersedia di sini.","bad"); } }
+  var j=e.target.closest("button[data-jad]");
+  if(j){ RVJAD[id]=j.dataset.jad; if(id==="docLive") renderLive(); else renderBerkas(); return; }
+  var u=e.target.closest("button[data-ubah]");
+  if(u){ var s=u.dataset.ubah.split(":"), n=+s[0], f=s[1]; bukaStep(n);
+    setTimeout(function(){ var el=f.indexOf("#blok:")===0?document.querySelector("#wawBlok input[id^='w_"+f.slice(6)+"_']"):$(f); if(el){ el.scrollIntoView({block:"center"}); try{ el.focus({preventScroll:true}); }catch(er){} } },40); return; }
+  var c=e.target.closest("button[data-cetak]");
+  if(c){ cetakXl(c.dataset.cetak,id==="docLive"?buatPayload():(S.berkas||{}).p); }
 }); });
 
 /* =====================================================================
