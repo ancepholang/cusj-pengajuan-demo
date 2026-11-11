@@ -209,6 +209,20 @@ table.rv-t tr.tot td{border-top:1px solid var(--ink);border-bottom:0;font-weight
 .rv-cetak .row{flex-wrap:wrap;gap:8px}
 .rv-kop{display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 16px;text-align:center}
 .rv-kop img{width:52px;height:52px;object-fit:contain} .rv-kop b{display:block;font-size:16px;color:#1f6fb2;letter-spacing:.01em} .rv-kop span{font-size:13px;color:var(--muted)}
+.surat{font-family:"Times New Roman","Liberation Serif","DejaVu Serif",serif;font-size:13px;line-height:1.45;color:#000;min-width:720px;max-width:820px}
+.surat p{margin:6px 0} .surat .j{text-align:justify} .surat .c{text-align:center} .surat .r{text-align:right} .surat .ind{margin-left:14px}
+.surat .titik{letter-spacing:1px;color:#444}
+.surat table.skv{border-collapse:collapse;width:100%;font-size:inherit} .surat table.skv td{padding:1px 4px;border:0;vertical-align:top;background:none;color:#000;font-size:inherit;text-transform:none;letter-spacing:0;white-space:normal}
+.surat .pasal{margin-top:12px;break-inside:avoid-page} .surat .pj{text-align:center;margin-bottom:4px}
+.surat ol.sol{margin:2px 0;padding-left:22px} .surat ol.sol li{margin:2px 0;text-align:justify}
+.surat table.sjam{margin-top:4px} .surat table.sjam td{font-size:12px;white-space:normal}
+.surat .xl-kop{font-family:Arial,"Liberation Sans",sans-serif;margin-bottom:10px}
+table.s-ttd{width:100%;margin-top:16px;border-collapse:collapse} table.s-ttd td{width:50%;text-align:center;border:0;padding:2px;background:none;font-size:inherit;text-transform:none;letter-spacing:0;color:#000}
+table.s-ttd tr.ruang td{height:64px}
+.surat-p{margin:10px 0 4px;font-size:12.5px}
+.xl .xt.slip-ttd{margin-top:12px;text-align:center} .xl .xt.slip-ttd td{text-align:center;width:25%;white-space:normal} .xl .xt.slip-ttd tr.ruang td{height:70px}
+.surat .ind.nomor{display:flex;gap:6px} .surat .ind.nomor>span{padding-top:1px;min-width:16px} .surat .ind.nomor>table{flex:1}
+.ttd-set{margin-top:4px} .ttd-set .fg{margin-top:8px} .ttd-set .row{margin-top:8px}
 #cetakArea{display:none}
 .versi{font-size:12px;font-weight:400;color:var(--muted);margin-left:6px;letter-spacing:0}
 /* ===== tema modern ===== */
@@ -308,6 +322,8 @@ label.f{font-weight:600;color:#44544d}
 .xl-ttd{display:grid;grid-template-columns:1fr 1fr;text-align:center;margin-top:14px}
 .xl-ttd .garis{margin:56px auto 0;border-top:1px solid #000;width:60%;padding-top:2px}
 @media print{
+  html,body{background:#fff!important} .surat{font-size:11.5px!important}
+  .xl-slip .xt td{font-size:9.5px!important;padding:0 3px!important;line-height:1.25} .xl-slip .xl-kop{min-height:80px} .xl-slip .xl-kop .lg{height:74px} .xl .xt.slip-ttd tr.ruang td{height:46px} .xl-slip .surat-p{font-size:10px;margin:6px 0 2px} .xl-slip .xt.nol td{font-size:10px!important}
   body.cetak-xl > *:not(#cetakArea){display:none!important} body.cetak-xl #cetakArea{display:block!important}
   #v-pengajuan.cetak-dok > *:not(#s3), #v-pengajuan.cetak-dok #s3 > *:not(#docLive){display:none!important}
   .xl-wrap{border:0;overflow:visible} .xl{padding:0;min-width:0!important;max-width:none}
@@ -1706,7 +1722,141 @@ function jadwalXl(p,met){
 }
 
 /* ---------- Ringkasan pengajuan (tampilan modern). Cetak tetap memakai format Excel di atas. ---------- */
-var CETAK=[["form","Formulir Permohonan Kredit"],["pandu","Panduan Wawancara"],["aset","Laporan Aset & Penghasilan"],["annu","Jadwal Annuitas"],["menu","Jadwal Angsuran Menurun"]];
+/* ---------- SLIP, SPP, SPH, Surat Kuasa (format sama dengan sheet Excel) ---------- */
+var TTD_KOSONG={nama:"",ttl:"",pekerjaan:"",jabatan:"",alamat:"",kota:"",nomor:""};
+S.ttd=Object.assign({},TTD_KOSONG);
+function titik(v,n){ return v===""||v==null||v===0?"<span class='titik'>"+Array((n||28)+1).join(".")+"</span>":esc(v); }
+function romawi(m){ return ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][m]; }
+function tglSurat(p){ return dateOf(p.tgl_pengajuan)||new Date(); }
+function kotaTtd(){ return S.ttd.kota||(P.kopSurat||{}).kota||""; }
+function nomorSpp(p){ var t=tglSurat(p); return S.ttd.nomor?esc(S.ttd.nomor):"No. : …......./SPP/CU SJ/"+romawi(t.getMonth())+"/"+t.getFullYear(); }
+function kopSurat(){ return kopXl(); }
+function hitungAdm(p){ var w=p.wawancara||{}, adm=Math.round(p.jumlah*((P.administrasiPersen==null?2:P.administrasiPersen)/100)), lama=p.total_saldo_berjalan||0, bunga=w.tunggakan_bunga||0;
+  return {persen:(P.administrasiPersen==null?2:P.administrasiPersen),adm:adm,lama:lama,bunga:bunga,terima:p.jumlah-adm-lama-bunga}; }
+
+function dokSlip(p){
+  var a=p.anggota||{}, w=p.wawancara||{}, j=w.jaminan||{}, pj=w.penjamin||{}, db=dataDb(p), rc=rincianDua(p), h=hitungAdm(p), t=tglSurat(p), thn=p.jangka_bulan?String(Math.round(p.jangka_bulan/12*10)/10).replace(".",","):"";
+  function r(no,l,v,ext){ return "<tr><td class='c'>"+no+"</td><td>"+l+"</td><td>:</td><td colspan='3'>"+v+"</td>"+(ext||"<td colspan='3'></td>")+"</tr>"; }
+  var idn=[["Nama Lengkap",xt(a.nama)],["Nama panggilan",xt((a.nama||"").toUpperCase())],["Jenis Kelamin",""],["Tempat, Tgl. Lahir",db.l?tglPanjang(dateOf(db.l)):""],["Usia",db.l?Math.floor(bulanAntara(dateOf(db.l),t)/12)+" Tahun":""],
+    ["Menjadi Anggota",tglPanjang(dateOf(a.tgl_jadi_anggota))],["Lama Menjadi Anggota",xt(p.lama_anggota)],["Nomor KTP",""],["No.Telepon/HP",""],["Pekerjaan",""],["Alamat Sekarang",""],["Desa / Kec. / Kabupaten",""],["Status Perkawinan",""],["Nama Ibu Kandung",""],["Nama suami/istri",""],["Pekerjaan suami/istri",""]];
+  var adm=[["Administrasi",persen(h.persen),h.adm],["Anggota Baru","",0],["Simpanan Wajib","",0],["Taman","",0],["Pinjaman lama","",h.lama],["Bunga","",h.bunga],["Denda","",0],["Terima/Pasimpong","",h.terima]];
+  var met=(p.cara_pembayaran||{}).metode;
+  return "<div class='xl-wrap'><div class='xl xl-form xl-slip'>"+kopSurat()+"<div class='xl-judul3'>SLIP PENCAIRAN PINJAMAN</div>"+
+    "<table class='xt'><colgroup><col style='width:30px'><col style='width:24%'><col style='width:12px'><col><col><col><col style='width:13%'><col style='width:12px'><col style='width:22%'></colgroup>"+
+    "<tr><td class='c'>1</td><td>Nama Pengaju Pinjaman</td><td>:</td><td colspan='3' class='isi'><b>"+xt(a.nama)+"</b></td><td>BA</td><td>:</td><td>"+xt(a.no_ba)+"</td></tr>"+
+    "<tr><td class='c'>2</td><td>Hari/ Tgl/ Bulan/ Th</td><td>:</td><td colspan='3'>"+tglHari(t)+"</td><td>No</td><td>:</td><td>"+(S.ttd.nomor?esc(S.ttd.nomor):"")+"</td></tr>"+
+    "<tr><td class='c'>3</td><td>Jumlah Pinjaman</td><td>:</td><td class='isi r'><b>"+rp(p.jumlah)+"</b></td><td colspan='5' class='miring kecil'>"+xt(p.terbilang||terbilang(p.jumlah))+"</td></tr>"+
+    "<tr><td class='c'>4</td><td>Tujuan Pinjaman</td><td>:</td><td colspan='6' class='isi miring'><b>"+xt(p.tujuan)+"</b></td></tr>"+
+    "<tr><td class='c'>5</td><td>Jangka waktu</td><td>:</td><td class='isi c'>"+xt(p.jangka_bulan)+"</td><td>Bulan/</td><td>"+thn+" Tahun</td><td>Jenis Pinjaman</td><td></td><td>"+(kodeP(p)?"P "+esc(kodeP(p)):"")+"</td></tr>"+
+    "<tr><td colspan='9' class='abu'><b>DATA ANGGOTA</b></td></tr>"+
+    idn.map(function(x,i){ return "<tr><td class='c'>"+(i+1)+"</td><td>"+x[0]+"</td><td>:</td><td colspan='6'>"+x[1]+"</td></tr>"; }).join("")+
+    "<tr><td colspan='3' class='abu'><b>2. Sebagai Jaminan Pinjaman :</b></td><td colspan='6' class='abu'><b>"+xt((p.jenis_pinjaman||{}).nama)+"</b></td></tr>"+
+    "<tr><td class='c'>1</td><td>Simpanan atas nama</td><td>:</td><td colspan='3'>"+xt(a.nama)+"</td><td>No BA</td><td></td><td>"+xt(a.no_ba)+"</td></tr>"+
+    "<tr><td class='c'>2</td><td>Simpanan atas nama</td><td>:</td><td colspan='3'>"+xt(pj.nama)+"</td><td>No BA</td><td></td><td>"+xt(pj.no_ba)+"</td></tr>"+
+    "<tr><td class='c'>3</td><td>Simpanan atas nama</td><td>:</td><td colspan='3'></td><td>No BA</td><td></td><td></td></tr>"+
+    "<tr class='hd'><td class='c'>No.</td><td>Jaminan</td><td></td><td>atas nama</td><td colspan='2'>No. Bukti Pemilik</td><td colspan='2'>Hub</td><td class='r'>Nilai Taksiran</td></tr>"+
+    "<tr><td class='c'>1</td><td>"+xt(j.nama_barang)+"</td><td></td><td>"+xt(j.atas_nama)+"</td><td colspan='2'>"+xt(j.legalitas)+(j.nomor?" "+esc(j.nomor):"")+"</td><td colspan='2'>"+xt(j.hubungan)+"</td><td class='r'><b>"+(j.nilai_taksiran?rp(j.nilai_taksiran):"")+"</b></td></tr>"+
+    "<tr><td class='c'>2</td><td></td><td></td><td></td><td colspan='2'></td><td colspan='2'></td><td class='r'>-</td></tr><tr><td class='c'>3</td><td></td><td></td><td></td><td colspan='2'></td><td colspan='2'></td><td class='r'>-</td></tr>"+
+    "<tr><td colspan='9' class='abu'><b>3. Rincian Pengembalian Pinjaman :</b></td></tr>"+
+    "<tr class='hd'><td></td><td></td><td></td><td></td><td></td><td></td><td class='r"+(met==="menurun"?" pilih":"")+"'>Menurun</td><td></td><td class='r"+(met==="annuitas"?" pilih":"")+"'>Annuitas</td></tr>"+
+    "<tr><td class='c'>1</td><td>Angsuran Pokok</td><td></td><td colspan='3'>Rp.</td><td class='r'>"+rp(rc.m.pokok)+"</td><td></td><td class='r'>"+rp(rc.a.pokok)+"</td></tr>"+
+    "<tr><td class='c'>2</td><td>Bunga Pinjaman <span style='float:right'>"+persen(p.suku_bunga_persen_per_bulan)+"</span></td><td></td><td colspan='3'>Rp.</td><td class='r'>"+rp(rc.m.bunga)+"</td><td></td><td class='r'>"+rp(rc.a.bunga)+"</td></tr>"+
+    "<tr><td class='c'>3</td><td>Tabungan setiap bulan</td><td></td><td colspan='3'>Rp.</td><td class='r'>"+rp(rc.tab)+"</td><td></td><td class='r'>"+rp(rc.tab)+"</td></tr>"+
+    "<tr><td></td><td><b><i>Jumlah Setoran</i></b></td><td></td><td colspan='3'>Rp.</td><td class='r'><b>"+rp(rc.m.jml)+"</b></td><td></td><td class='r'><b>"+rp(rc.a.jml)+"</b></td></tr>"+
+    "<tr><td colspan='9' class='abu'><b>4. Administrasi Pinjaman</b></td></tr>"+
+    adm.map(function(x,i){ return "<tr><td class='c'>"+(i+1)+"</td><td>"+(i>=4&&i!==6?"<b>"+x[0]+"</b>":x[0])+" <span style='float:right'>"+x[1]+"</span></td><td></td><td class='r isi'>"+(i===7?"<b>"+xa(x[2])+"</b>":xa(x[2]))+"</td><td colspan='5'></td></tr>"; }).join("")+
+    "<tr><td class='c'>9</td><td>Terbilang</td><td></td><td colspan='6' class='miring'>"+xt(terbilang(h.terima))+"</td></tr></table>"+
+    "<p class='surat-p'><b><i>Saya menyatakan bahwa saya telah menerima uang tunai sejumlah yang tertera pada administrasi pinjaman di atas dan tidak kurang sedikitpun dari catatan di atas</i></b></p>"+
+    "<table class='xt nol' style='width:auto;margin-left:30px'><tr><td>Transaksi terjadi di</td><td>:</td><td>"+(kotaTtd()?"Kantor "+esc(kotaTtd()):titik("",30))+"</td></tr><tr><td>Pada hari/ Tanggal</td><td>:</td><td>"+tglHari(t)+"</td></tr><tr><td>Waktu/Jam Pencairan</td><td>:</td><td>"+titik("",20)+"</td></tr></table>"+
+    "<table class='xt slip-ttd'><tr><td>Adm Kredit</td><td>Manager Cabang</td><td>Kasir</td><td>Anggota</td></tr><tr class='ruang'><td></td><td></td><td></td><td></td></tr>"+
+    "<tr><td>"+titik("",22)+"</td><td>"+(S.ttd.nama?esc(S.ttd.nama):titik("",22))+"</td><td>"+titik("",22)+"</td><td><b>"+xt(a.nama)+"</b><br>"+xt(a.no_ba)+"</td></tr></table>"+
+    "</div></div>";
+}
+
+function pasal(no,judul,isi){ return "<div class='pasal'><div class='pj'><b>Pasal "+no+"</b><br><b>"+judul+"</b></div>"+isi+"</div>"; }
+function ol(items,start){ return "<ol class='sol'"+(start?" start='"+start+"'":"")+">"+items.map(function(x){ return "<li>"+x+"</li>"; }).join("")+"</ol>"; }
+function kvS(rows,lebar){ return "<table class='skv'>"+rows.map(function(r){ return "<tr><td style='width:"+(lebar||"34%")+"'>"+r[0]+"</td><td style='width:14px'>:</td><td>"+r[1]+"</td></tr>"; }).join("")+"</table>"; }
+
+function dokSPP(p){
+  var a=p.anggota||{}, w=p.wawancara||{}, j=w.jaminan||{}, pj=w.penjamin||{}, c=p.rincian||{}, db=dataDb(p), t=tglSurat(p), T=S.ttd, met=(p.cara_pembayaran||{}).metode;
+  var hari=HARI[t.getDay()], h=hitungAdm(p), kota=kotaTtd();
+  var bungaM=met!=="flat"?persen(p.suku_bunga_persen_per_bulan):"", bungaT=met==="flat"?persen(p.suku_bunga_persen_per_bulan):"";
+  var isi="<div class='c'><b><u>SURAT PERJANJIAN PINJAMAN</u></b><br><b>"+nomorSpp(p)+"</b></div>"+
+    "<p>Pada Hari ini <b>"+hari+"</b> tanggal <b>"+tglPanjang(t)+"</b> telah terjadi perjanjian Kredit antara :</p>"+
+    "<div class='ind nomor'><span>1.</span>"+kvS([["Nama",titik(T.nama)],["TTL",titik(T.ttl)],["Pekerjaan",titik(T.pekerjaan)],["Jabatan",titik(T.jabatan)],["Alamat",titik(T.alamat)]],"22%")+"</div>"+
+    "<p class='j'>Dalam hal ini bertindak dalam jabatannya untuk dan atas nama Credit Union Semandang Jaya yang berkedudukan di Ketapang dan beralamat di Balai Semandang yang selanjutnya di sebut <b>PIHAK I</b></p>"+
+    "<div class='ind nomor'><span>2.</span><table class='skv'><tr><td style='width:22%'>Nama Lengkap</td><td style='width:14px'>:</td><td>"+titik(a.nama)+"</td><td style='width:18%'>No. BA</td><td style='width:14px'>:</td><td>"+titik(a.no_ba,18)+"</td></tr>"+
+      "<tr><td>Nama Panggilan</td><td>:</td><td>"+titik((a.nama||"").toUpperCase())+"</td><td>Pekerjaan</td><td>:</td><td>"+titik("",18)+"</td></tr>"+
+      "<tr><td>No KTP</td><td>:</td><td>"+titik("")+"</td><td>Nama ibu kandung</td><td>:</td><td>"+titik("",18)+"</td></tr>"+
+      "<tr><td>Usia</td><td>:</td><td>"+(db.l?Math.floor(bulanAntara(dateOf(db.l),t)/12)+" Tahun":titik(""))+"</td><td></td><td></td><td></td></tr>"+
+      "<tr><td>TTL</td><td>:</td><td>"+(db.l?tglPanjang(dateOf(db.l)):titik(""))+"</td><td></td><td></td><td></td></tr>"+
+      "<tr><td>Jenis Kelamin</td><td>:</td><td>"+titik("")+"</td><td></td><td></td><td></td></tr>"+
+      "<tr><td>Alamat / Jalan</td><td>:</td><td>"+titik("")+"</td><td></td><td></td><td></td></tr>"+
+      "<tr><td>Gang</td><td>:</td><td>"+titik("")+"</td><td></td><td></td><td></td></tr>"+
+      "<tr><td>Desa</td><td>:</td><td>"+titik("")+"</td><td>Kabupaten</td><td>:</td><td>"+titik("",18)+"</td></tr>"+
+      "<tr><td>Kecamatan</td><td>:</td><td>"+titik("")+"</td><td>Propinsi</td><td>:</td><td>Kalimantan Barat</td></tr></table></div>"+
+    "<p class='j'>Dalam hal ini bertindak atas nama sendiri yang selanjutnya disebut <b>PIHAK II</b>, Para pihak telah sepakat Untuk mengadakan Perjanjian Kredit dengan syarat-syarat dan ketentuan-ketentuan sebagai berikut:</p>"+
+    pasal(1,"JUMLAH JENIS DAN PENGGUNAAN PINJAMAN",ol(["PIHAK I memberikan Pinjaman kepada PIHAK II sebesar <b><i>Rp "+rp(p.jumlah)+"</i></b> <i>("+xt(p.terbilang||terbilang(p.jumlah))+")</i>",
+      "Jenis Pinjaman : <b>"+xt((p.jenis_pinjaman||{}).nama)+"</b> &nbsp; Kode <b>"+(kodeP(p)?"P. "+esc(kodeP(p)):"")+"</b>","Pinjaman di Gunakan untuk : <b><i>"+xt(p.tujuan)+"</i></b>"]))+
+    pasal(2,"BUNGA PINJAMAN",ol(["Di hitung secara menurun (M) Sebesar : <b>"+(bungaM||"……")+"</b> &nbsp; *Perbulan dari saldo pinjaman terakhir","Di hitung secara tetap (T) Sebesar : <b>"+(bungaT||"……")+"</b> &nbsp; *Perbulan dari saldo pinjaman awal"]))+
+    pasal(3,"CARA PEMBAYARAN, JANGKA WAKTU DAN JATUH TEMPO PINJAMAN",ol(["PIHAK II akan mengembalikan uang pinjaman kepada PIHAK I dengan uang tunai dan diangsur setiap bulan sebesar <b>Rp "+rp(c.jumlah)+"</b> dengan rincian sebagai berikut :"+
+      "<table class='skv' style='width:70%;margin-top:4px'><tr><td>Angsuran Pokok</td><td></td><td>Rp</td><td class='r'>"+rp(c.angsuran_pokok)+"</td></tr><tr><td>Bunga</td><td><b>"+persen(p.suku_bunga_persen_per_bulan)+"</b> "+xt((p.cara_pembayaran||{}).nama)+"</td><td>Rp</td><td class='r'>"+rp(c.bunga)+"</td></tr><tr><td>Tabungan</td><td></td><td>Rp</td><td class='r'>"+rp(c.tabungan)+"</td></tr><tr><td><b>Jumlah setoran setiap bulan minimal</b></td><td></td><td>Rp</td><td class='r' style='border-top:1px solid #000'><b>"+rp(c.jumlah)+"</b></td></tr></table>",
+      "Pinjaman PIHAK II kepada PIHAK I dikembalikan paling lama jangka waktu pengembalian selama <b>"+xt(p.jangka_bulan)+"</b> bulan.<br>Jatuh tempo pinjaman PIHAK II kepada PIHAK I ditentukan pada tanggal <b>"+t.getDate()+"</b> setiap bulan"]))+
+    pasal(4,"BIAYA-BIAYA",ol(["PIHAK I dikenakan biaya administrasi sebesar <b>"+persen(h.persen)+"</b> dari jumlah pinjaman yang di cairkan","PIHAK II dikenakan biaya formulir dan matrai sesuai ketentuan yang berlaku","PIHAK II dikenakan biaya asuransi simpanan dan pinjaman sesuai dengan Pola Kebijakan Credit Union Semandang Jaya yang berlaku.","Biaya-biaya yang dibayarkan oleh PIHAK II bisa secara tunai atau dipotong dari Pinjaman yang di cairkan"]))+
+    pasal(5,"JAMINAN",ol(["Guna menjamin lebih jauh semua pembayaran utang-utang PIHAK II kepada Pihak I (KSP CU Semandang Jaya) baik yang timbul berdasarkan perjanjian Kredit ini, maupun berdasarkan Perjanjian Kredit Lainnya yang mungkin di buat di kemudian hari yang ditandatangani oleh peminjam, maka peminjam dalam hal ini PIHAK II dengan ini menyatakan kepada Credit Union Semandang Jaya untuk dibuat perjanjian-perjanjian jaminan untuk kepentingan KSP CU Semandang Jaya yaitu:"+
+      "<table class='skv' style='margin:4px 0'><tr><td style='width:20px'>1.</td><td style='width:40px'>BA :</td><td style='width:35%'>"+titik(a.no_ba,20)+"</td><td style='width:80px'>atas nama</td><td>"+titik(a.nama,20)+"</td></tr><tr><td>2.</td><td>BA :</td><td>"+titik(pj.no_ba,20)+"</td><td>atas nama</td><td>"+titik(pj.nama,20)+"</td></tr></table>"+
+      "<table class='xt sjam'><tr class='hd'><td class='c'>No.</td><td>Nama barang Jaminan</td><td>Legalitas</td><td>No Bukti kepemilikan</td><td>Atas nama</td><td>Hub dengan peminjam</td></tr><tr><td class='c'>1</td><td>"+xt(j.nama_barang)+"</td><td>"+xt(j.legalitas)+"</td><td>"+xt(j.nomor)+"</td><td>"+xt(j.atas_nama)+"</td><td>"+xt(j.hubungan)+"</td></tr><tr><td class='c'>2</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td class='c'>3</td><td></td><td></td><td></td><td></td><td></td></tr></table>",
+      "Anggota yang menjaminkan sertifikat, baik hak milik, hak guna usaha, dan hak guna tanggungan harus sudah dibebankan hak tanggungan yang dibuat oleh Notaris/PPAT","Dokumen barang jaminan tersebut akan di simpan oleh KSP CU Semandang Jaya"]))+
+    pasal(6,"DENDA KELALAIAN",ol(["PIHAK II dikenakan denda sebesar 3% dari total angsuran dan bunga tertunggak apabila terjadi kelalaian dan bunga pinjaman"]))+
+    pasal(7,"SOMASI","<p class='j'>Jika dalam waktu berjalan PIHAK II tidak melunasi atau melakukan tunggakan pembayaran maka pihak I dalam hal ini KSP CU Semandang Jaya akan memberikan somasi atau teguran dalam bentuk:</p>"+ol(["Jika dalam jangka waktu 1 bulan anggota tidak membayar pinjaman maka akan diberikan somasi teguran agar dilunasinya tunggakan tersebut.","PIHAK I akan memberikan tenggang waktu selama 2 minggu somasi/ teguran agar anggota segera memenuhi kewajibannya. Jika tidak, maka PIHAK I akan memberikan somasi/ teguran ke 2 (dua) agar anggota membayar tunggakan pinjaman","Jika pada somasi kedua juga tidak diindahkan PIHAK ke II akan melakukan tindakan somasi ke 3 (Tiga) sekaligus penyitaan barang jaminan dan atau pemasangan plang atau segel yang berbunyi Rumah/tanah /Barang jaminan lainnya, dalam pengawasan KSP CU Semandang Jaya ataupun pengumuman barang Jaminan"]))+
+    pasal(8,"PENGUASAAN BARANG JAMINAN","<p class='j'>Penguasaan barang jaminan oleh PIHAK I terhadap barang yang dijaminkan oleh PIHAK II jika terjadi salah satu hal di bawah ini :</p>"+ol(["Terhadap barang jaminan yang telah dialihkan haknya karena PIHAK II melanggar kesepakatan atau Perjanjian pinjaman dengan tidak membayar angsuran, maka terhadap barang tersebut akan dilakukan Penyitaan atau pelelangan","Pihak kedua pailit atau mengajukan permohonan pailit, dibubarkan, tersangkut perkara pidana atau meninggal dunia","Barang jaminan tidak dapat dijual, disewakan, dipindahtangankan, dialihkan baik sebagian atau seluruhnya tanpa persetujuan tertulis terlebih dahulu dari Pihak I"]))+
+    pasal(9,"KUASA DAN EKSEKUSI",ol(["Eksekusi terhadap jaminan fidusia (pasal 29(1)a,b dan c ayat 2 UU Republik Indonesia No 42 Tahun 1999 tentang jaminan fidusia","Eksekusi hak tanggungan pasal 20 UU Republik Indonesia no 4 Tahun 1996 tentang hak tanggungan","PIHAK II memberikan kuasa kepada PIHAK I dalam hal ini KSP CU Semandang Jaya untuk mendebet/memotong rekening pihak II pada KSP CU Semandang Jaya, Jika sewaktu-waktu pihak II melakukan kelalaian pinjaman. Dan untuk pinjaman setara dan atau dibawah saldo simpanan kategori Kapitalisasi (Pinjaman menambah simpanan) jika selama 3 bulan berturut-turut tidak dilakukan kewajiban pembayaran akan ditarik simpanannya untuk melunasi pinjaman","Apabila PIHAK II berlaku lalai terhadap pinjaman lebih dari 6 bulan, maka pihak I dibenarkan dan berkuasa untuk menguasai barang jaminan maupun pelelangan, melakukan proses balik nama ke KSP CU Semandang Jaya terhadap barang jaminan yang diagunkan.","Apabila barang jaminan yang dijaminkan tidak cukup nilainya untuk membayar pinjaman jika terjadi kelalaian di kemudian hari, maka pihak I dibenarkan untuk meminta barang jaminan lainnya sebagai tambahan untuk mengangsur ataupun melunasi pinjaman yang tertunggak","Dalam penilaian barang sitaan sepenuhnya ditentukan oleh PIHAK I dengan mengacu pada nilai pasaran yang berlaku."]))+
+    pasal(10,"PENYELESAIAN PERSELISIHAN",ol(["Apabila terjadi perselisihan dari Perjanjian ini, maka akan diselesaikan dengan jalan musyawarah dan atau secara adat yang berlaku di wilayah tersebut.","Apabila tidak terjadi kesepakatan antara kedua belah pihak dalam musyawarah maka kedua belah pihak sepakat untuk menyelesaikan dengan mengambil domisili tetap di Kantor pengadilan Negeri Ketapang","Biaya yang timbul akibat perselisihan ini di tanggung oleh PIHAK II"]))+
+    "<p class='j'>Demikian Perjanjian ini di buat dan ditandatangani oleh Para pihak di "+(kota?esc(kota):titik("",20))+" pada tanggal sebagaimana tersebut diatas, serta dibuat rangkap dua dengan materai cukup sehingga memiliki Kekuatan Hukum yang sama</p>"+
+    "<p class='r' style='margin-top:10px'>"+(kota?esc(kota):titik("",20))+", "+tglPanjang(t)+"</p>"+
+    "<table class='s-ttd'><tr><td><b>PIHAK I</b></td><td><b>PIHAK II</b></td></tr><tr class='ruang'><td></td><td></td></tr><tr><td><b><u>"+(T.nama?esc(T.nama):titik("",26))+"</u></b></td><td><b><u>"+xt(a.nama)+"</u></b><br>BA: "+xt(a.no_ba)+"</td></tr></table>"+
+    "<table class='s-ttd'><tr><td>Di setujui<br>Suami/Istri</td><td></td></tr><tr class='ruang'><td></td><td></td></tr><tr><td>"+titik("",26)+"</td><td></td></tr></table>";
+  return "<div class='xl-wrap'><div class='xl surat'>"+kopSurat()+isi+"</div></div>";
+}
+
+function dokSPH(p){
+  var a=p.anggota||{}, c=p.rincian||{}, db=dataDb(p), t=tglSurat(p), kota=kotaTtd();
+  var isi="<div class='c' style='margin:30px 0 22px'><b><u style='font-size:15px'>SURAT PENGAKUAN HUTANG</u></b></div>"+
+    "<p>Saya yang bertanda tangan dibawah ini :</p>"+kvS([["Nama",titik(a.nama)],["Tempat Tanggal Lahir",db.l?tglPanjang(dateOf(db.l)):titik("")],["Pekerjaan",titik("")],["Alamat Rumah",titik("")],["Nomor Induk Kependudukan",titik("")]],"38%")+
+    "<p class='j'>Dengan ini saya menyatakan bahwa benar saya telah mendapat Pinjaman dan menerima uang pinjaman dari KSP CU Semandang Jaya:</p>"+
+    "<table class='skv'>"+[["Sebesar","Rp "+rp(p.jumlah)+" <i>("+xt(p.terbilang||terbilang(p.jumlah))+")</i>"],["Nomor Surat Perjanjian",S.ttd.nomor?esc(S.ttd.nomor):titik("")],["Atas nama anggota",titik(a.nama)],["Nomor Anggota",titik(a.no_ba)],["Pada tanggal",tglPanjang(t)],["Jangka waktu pengembalian",xt(p.jangka_bulan)+" bulan"],["Angsuran setiap bulan Rp.",rp(c.jumlah)+" Perbulan"]].map(function(r,i){ return "<tr><td style='width:24px'>"+(i+1)+".</td><td style='width:36%'>"+r[0]+"</td><td style='width:14px'>:</td><td>"+r[1]+"</td></tr>"; }).join("")+"</table>"+
+    "<p class='j'>Saya telah mendapat dan menerima penjelasan tentang ketentuan kredit simpan pinjam yang berlaku di CU Semandang Jaya, dengan ini menyatakan bertanggungjawab atas pelunasan kredit apabila dikemudian hari saya tidak dapat melakukan kewajiban kredit tiga bulan berturut-turut, maka saya menyatakan bersedia dan dengan suka rela menyerahkan jaminan untuk disita maupun dikuasai oleh pihak CU Semandang Jaya guna melunasi semua hutang dan kewajiban yang tertunggak.</p>"+
+    "<p class='j'>Demikian pernyataan ini dibuat dengan sebenar-benarnya, tanpa paksaan dan tekanan dari pihak manapun untuk dipergunakan sebagaimana mestinya.</p>"+
+    "<table class='skv' style='width:46%;margin:22px 0 0 auto'><tr><td>Dibuat di</td><td>:</td><td>"+(kota?esc(kota):titik("",18))+"</td></tr><tr><td>Pada tanggal</td><td>:</td><td>"+tglPanjang(t)+"</td></tr><tr><td colspan='3' style='padding-top:10px'><b>Yang membuat pernyataan,</b></td></tr><tr><td colspan='3' style='height:70px;vertical-align:bottom'><b><u>"+xt(a.nama)+"</u></b></td></tr></table>"+
+    "<p style='margin-top:18px'><b><u>Saksi-saksi:</u></b></p>"+
+    "<table class='s-ttd'><tr><td>Loan Officer</td><td>Suami/Istri</td></tr><tr class='ruang'><td></td><td></td></tr><tr><td>"+titik("",26)+"</td><td>"+titik("",26)+"</td></tr></table>";
+  return "<div class='xl-wrap'><div class='xl surat'>"+isi+"</div></div>";
+}
+
+function dokKuasa(p){
+  var a=p.anggota||{}, t=tglSurat(p), T=S.ttd, kota=kotaTtd();
+  var isi="<div class='c' style='margin:30px 0 22px'><b style='font-size:15px'>SURAT KUASA PENARIKAN SIMPANAN SEBAGAI JAMINAN</b></div>"+
+    "<p>Yang bertanda tangan di bawah ini:</p>"+kvS([["Nama",titik(a.nama)],["Alamat",titik("")],["No. KTP",titik("")],["No. Rekening",titik(a.no_ba)]],"30%")+
+    "<p>Selanjutnya disebut sebagai <b>Pemberi Kuasa</b>.</p><p>Dengan ini memberi kuasa kepada:</p>"+kvS([["Nama",titik(T.nama)],["Alamat",titik(T.alamat)],["Jabatan",titik(T.jabatan)]],"30%")+
+    "<p>Selanjutnya disebut sebagai <b>Penerima Kuasa</b>.</p><p><b>Untuk Keperluan</b>:</p>"+
+    ol(["Menarik sejumlah dana yang terdapat dalam rekening simpanan milik saya di CU Semandang Jaya dengan nomor anggota/rekening : <b>"+titik(a.no_ba,20)+"</b> yang berlokasi di Kantor Cabang ……………… Desa ……………… Kecamatan ……………………… Kabupaten ………………………",
+      "<b>Menarik dana secara otomatis (autodebet)</b> dari rekening Pasimpong milik Pemberi Kuasa di Credit Union Semandang Jaya dengan no rekening: ………………………","Menggunakan dana yang ditarik untuk keperluan pemenuhan kewajiban sesuai perjanjian Pinjaman","Melakukan tindakan administratif yang diperlukan dalam rangka pelaksanaan autodebet tersebut, sesuai dengan ketentuan yang berlaku."])+
+    "<p class='j'>Surat Kuasa ini bertujuan sebagai jaminan atas pinjaman saya kepada KSP Credit Union Semandang Jaya berdasarkan Surat Perjanjian pinjaman <b>"+(T.nomor?esc(T.nomor):titik("",24))+"</b> tanggal <b>"+tglPendek(t)+"</b></p>"+
+    "<p class='j'>Dengan surat ini, Penerima Kuasa berhak untuk melakukan penarikan dana dari rekening simpanan saya apabila saya lalai atau gagal memenuhi kewajiban pelunasan pinjaman sesuai dengan syarat-syarat yang telah disepakati dalam perjanjian tersebut.</p>"+
+    "<p><b><u>Ketentuan-Ketentuan</u></b>:</p>"+ol(["Penerima Kuasa hanya dapat melakukan penarikan dana dari rekening simpanan saya setelah terbukti bahwa saya tidak memenuhi kewajiban pembayaran angsuran dan bunga serta denda sesuai perjanjian pinjaman.","Kuasa ini tidak dapat ditarik kembali kecuali setelah kewajiban pelunasan pinjaman sepenuhnya terpenuhi.","Pemberi Kuasa menyatakan bahwa dana dalam rekening tersebut akan disediakan sesuai kesepakatan perjanjian.","Pemberi Kuasa memahami bahwa pelaksanaan autodebet sepenuhnya menjadi tanggung jawab Credit Union sesuai peraturan yang berlaku."])+
+    "<p class='j'>Demikian surat kuasa ini dibuat dengan sebenar-benarnya dan tanpa paksaan dari pihak mana pun untuk dipergunakan sebagaimana mestinya.</p>"+
+    "<p class='r' style='margin-top:14px'>"+(kota?esc(kota):titik("",20))+", "+tglPanjang(t)+"</p>"+
+    "<table class='s-ttd'><tr><td>PENERIMA KUASA</td><td>PEMBERI KUASA</td></tr><tr class='ruang'><td></td><td></td></tr><tr><td><b><u>"+(T.nama?esc(T.nama):titik("",26))+"</u></b></td><td><b><u>"+xt(a.nama)+"</u></b><br>BA: "+xt(a.no_ba)+"</td></tr></table>";
+  return "<div class='xl-wrap'><div class='xl surat'>"+isi+"</div></div>";
+}
+
+function formTtd(){
+  var T=S.ttd, f=function(k,l,ph){ return "<label class='f'>"+l+"<input type='text' data-ttd='"+k+"' value='"+esc(T[k]||"")+"' placeholder='"+(ph||"")+"'></label>"; };
+  return "<details class='ttd-set'><summary>Data penandatangan untuk surat (opsional)</summary><p class='note'>Dipakai di Surat Perjanjian, Surat Kuasa, dan SLIP. Yang dikosongkan tercetak titik-titik untuk diisi tangan. Tersimpan di perangkat ini.</p><div class='fg'>"+
+    f("nama","Nama pejabat CU (PIHAK I)","contoh: Derensius, SE")+f("jabatan","Jabatan","contoh: Manager Kantor Cabang")+f("ttl","Tempat, tgl lahir")+f("pekerjaan","Pekerjaan","Karyawan CU Semandang Jaya")+f("alamat","Alamat")+f("kota","Tempat tanda tangan","contoh: Balai Semandang")+f("nomor","Nomor surat perjanjian","contoh: 012/SPP/CU SJ/XI/2026")+
+    "</div><div class='row'><button class='btn small' type='button' data-ttdsimpan='1'>Simpan</button></div></details>";
+}
+var CETAK=[["form","Formulir Permohonan Kredit"],["pandu","Panduan Wawancara"],["aset","Laporan Aset & Penghasilan"],["annu","Jadwal Annuitas"],["menu","Jadwal Angsuran Menurun"],["slip","SLIP Pencairan Pinjaman"],["spp","Surat Perjanjian Pinjaman"],["sph","Surat Pengakuan Hutang"],["kuasa","Surat Kuasa Penarikan Simpanan"]];
 var RVJAD={docLive:"",docBerkas:""};
 function rvJml(rows){ return rows.reduce(function(s,r){ return s+(r[1]||0); },0); }
 function rvList(rows,total,lblTotal){
@@ -1790,7 +1940,7 @@ function ringkasan(p,target){
 
 function berkasHtml(target,p){
   var cetak=isAdmin()?"<div class='card rv-cetak noprint'><div class='card-head'><h3>Cetak berkas</h3><span class='note'>Hasil cetak memakai format resmi seperti di Excel.</span></div><div class='row'>"+
-    CETAK.map(function(x){ return "<button class='btn' type='button' data-cetak='"+x[0]+"'>"+x[1]+"</button>"; }).join("")+"</div></div>":"";
+    CETAK.map(function(x){ return "<button class='btn' type='button' data-cetak='"+x[0]+"'>"+x[1]+"</button>"; }).join("")+"</div>"+formTtd()+"</div>":"";
   return cetak+ringkasan(p,target);
 }
 function renderLive(){ var el=$("docLive"); if(el) el.innerHTML=berkasHtml("docLive",buatPayload()); }
@@ -1801,7 +1951,7 @@ function renderBerkas(){
 }
 function cetakXl(jenis,p){
   var a=$("cetakArea");
-  a.innerHTML=jenis==="pandu"?dokPandu(p):jenis==="form"?dokForm(p):jenis==="aset"?"<div class='xl-wrap'><div class='xl xl-aset'>"+lapAset(p)+"</div></div>":jadwalXl(p,jenis==="annu"?"annuitas":"menurun");
+  a.innerHTML=jenis==="slip"?dokSlip(p):jenis==="spp"?dokSPP(p):jenis==="sph"?dokSPH(p):jenis==="kuasa"?dokKuasa(p):jenis==="pandu"?dokPandu(p):jenis==="form"?dokForm(p):jenis==="aset"?"<div class='xl-wrap'><div class='xl xl-aset'>"+lapAset(p)+"</div></div>":jadwalXl(p,jenis==="annu"?"annuitas":"menurun");
   document.body.classList.add("cetak-xl"); document.body.classList.toggle("cetak-pandu",jenis==="pandu");
   try{ window.print(); }catch(er){ toast("Cetak tidak tersedia di sini.","bad"); }
 }
@@ -1813,6 +1963,7 @@ $("bKembali").addEventListener("click",function(){ var b=S.berkas||{}; if(b.dari
   var u=e.target.closest("button[data-ubah]");
   if(u){ var s=u.dataset.ubah.split(":"), n=+s[0], f=s[1]; bukaStep(n);
     setTimeout(function(){ var el=f.indexOf("#blok:")===0?document.querySelector("#wawBlok input[id^='w_"+f.slice(6)+"_']"):$(f); if(el){ el.scrollIntoView({block:"center"}); try{ el.focus({preventScroll:true}); }catch(er){} } },40); return; }
+  if(e.target.closest("button[data-ttdsimpan]")){ var box=e.target.closest(".ttd-set"); box.querySelectorAll("input[data-ttd]").forEach(function(i){ S.ttd[i.dataset.ttd]=i.value.trim(); }); KV.set("ttd",S.ttd); toast("Data penandatangan disimpan di perangkat ini.","ok"); return; }
   var c=e.target.closest("button[data-cetak]");
   if(c){ cetakXl(c.dataset.cetak,id==="docLive"?buatPayload():(S.berkas||{}).p); }
 }); });
@@ -2272,7 +2423,7 @@ var mk=$("btnMakro"); if(mk) mk.addEventListener("click",function(){ unduh("Pasa
   isiPilihan(); bangunWaw();
   await KV.open();
   var kd=P.kantor||{}; S.kantor={kop:kd.koperasi||"KSP CU SEMANDANG JAYA",kode:"",nama:"",alamat:kd.alamat||"Jl. Trans Kalimantan No. 25 Balai Semandang Kec. Simpang Hulu Kab. Ketapang Kal-Bar"};
-  tampilKantor();
+  tampilKantor(); try{ var td=await KV.get("ttd"); if(td) S.ttd=Object.assign({},TTD_KOSONG,td); }catch(e){}
   var ag=await KV.get("anggota"); if(ag&&ag.daftar){ S.daftar=ag.daftar; S.tglData=ag.dibuat||""; }
   var rw=await KV.get("riwayat"); if(Array.isArray(rw)) S.riwayat=rw;
   var p=await KV.get("peng"); if(Array.isArray(p)) S.peng=p;
