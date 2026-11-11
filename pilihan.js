@@ -11,6 +11,19 @@ window.PILIHAN = {
      Jika ingin file siap pakai per kantor, ubah di sini sebelum dibagikan. Hapus bagian ini jika tidak dipakai. */
   kantor: { koperasi: "KSP CU SEMANDANG JAYA", kode: "001", nama: "HEAD OFFICE", alamat: "Jl. Trans Kalimantan No. 25 Balai Semandang Kec. Simpang Hulu Kab. Ketapang Kal-Bar" },
 
+  /* Baris kop surat di Form Pengajuan (alamat kantor diambil dari Pengaturan).
+     kota = tempat tanda tangan pemohon. */
+  kopSurat: {
+    badanHukum: "Badan Hukum : 82/BH/IX.6   Tanggal 3 September 2001",
+    nomorAhu:   "Nomor : AHU-0004814.AH.01.28.  Tanggal 22 Oktober 2021",
+    telp:       "Kode Pos : 78854 - Telp. 082262493090",
+    email:      "E-mail: semandang91@yahoo.com, Website: cusemandangjaya.com",
+    kota:       "Balai Semandang"
+  },
+
+  /* Biaya administrasi pinjaman (%) di sheet Panduan Pengajuan */
+  administrasiPersen: 2,
+
   /* [ "kode", "nama jenis pinjaman" ] */
   jenisPinjaman: [
     ["301", "Pjm Modal Usaha (P-1)"],
