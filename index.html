@@ -304,39 +304,39 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
           <label class="f">Tunggakan saat ini (hari)<input type="text" inputmode="numeric" maxlength="4" class="num" id="fTunggak" placeholder="0"></label>
         </div>
       </div>
-      <div class="card">
+      <div class="card full">
         <h3>Plafon dan angsuran</h3>
         <div class="fg">
-          <label class="f">Simpanan SW + SP + Taman<input id="fSimp" class="ro num" readonly tabindex="-1" title="Terisi dari Wawancara (Saham + Taman)"></label>
+          <label class="f">Saham (SW + SP)<input type="text" inputmode="numeric" class="num uang" id="w_saham"></label>
+          <label class="f">Taman<input type="text" inputmode="numeric" class="num uang" id="w_taman"></label>
+          <label class="f">Simpanan SW + SP + Taman<input id="fSimp" class="ro num" readonly tabindex="-1" title="Saham + Taman"></label>
           <label class="f">Plafon pinjaman (%)<input type="text" inputmode="decimal" class="num" id="fPersen"></label>
           <label class="f">Selisih / lebih / kurang<input id="fSelisih" class="ro num" readonly tabindex="-1"></label>
           <label class="f">Plafon seharusnya<input id="fPlafon" class="ro num" readonly tabindex="-1"></label>
           <label class="f">Angsuran pokok ke-1<input id="rPokok" class="ro num" readonly tabindex="-1"></label>
-          <label class="f">Bunga ke-1 <span id="rPct"></span><input id="rBunga" class="ro num" readonly tabindex="-1"></label>
+          <label class="f"><span class="lt">Bunga ke-1 <span id="rPct"></span></span><input id="rBunga" class="ro num" readonly tabindex="-1"></label>
           <label class="f">Tabungan setiap bulan<input type="text" inputmode="numeric" class="num uang" id="rTab"></label>
           <label class="f">Jumlah setoran ke-1<input id="rJml" class="ro num" readonly tabindex="-1"></label>
         </div>
         <p class="note" id="rCatatan"></p>
-        <details><summary>Tabel angsuran lengkap</summary>
-          <div class="tw" style="margin-top:8px;max-height:360px"><table id="tAng"><thead><tr><th>Tanggal</th><th class="r">Ke</th><th class="r">Pokok</th><th class="r">Bunga</th><th class="r">Pokok + bunga</th></tr></thead><tbody></tbody>
-          <tfoot><tr><td colspan="2">Total</td><td class="r" id="aPokok">0</td><td class="r" id="aBunga">0</td><td class="r" id="aJml">0</td></tr></tfoot></table></div>
+        <details><summary>Tabel angsuran (sama seperti sheet Jadwal di Excel)</summary>
+          <div class="jadwal-head" id="jHead"></div>
+          <div class="tw" style="margin-top:8px;max-height:420px"><table id="tAng" style="white-space:nowrap"><thead><tr><th class="r">No.</th><th>Tgl Setor</th><th>Keterangan</th><th class="r">AP</th><th class="r">Bunga</th><th class="r">Tab</th><th class="r">Jlh Setoran</th><th class="r">Saldo</th></tr></thead><tbody></tbody>
+          <tfoot><tr><td></td><td colspan="2">Total</td><td class="r num" id="aPokok">0</td><td class="r num" id="aBunga">0</td><td class="r num" id="aTab">0</td><td class="r num" id="aJml">0</td><td></td></tr></tfoot></table></div>
+          <p class="note">Tanggal di aplikasi ditulis hari/bulan/tahun. Di Excel tanggal yang sama bisa tampil bulan/hari/tahun, misalnya 11/12/2026 di sini sama dengan 12/11/2026 di Excel.</p>
         </details>
       </div>
     </div>
-    <div class="row"><span class="sp"></span><button class="btn primary" type="button" data-go="2">Lanjut ke Wawancara</button></div>
+    <div class="row"><span class="sp"></span><button class="btn primary" type="button" data-go="2" id="goS2">Lanjut ke Wawancara</button></div>
   </div>
 
   <!-- langkah 2 -->
   <div class="step" id="s2">
     <div class="cols">
       <div class="card">
-        <h3>Modal di CU SJ</h3>
-        <div class="fg">
-          <label class="f">Saham (SW + SP)<input type="text" inputmode="numeric" class="num uang" id="w_saham"></label>
-          <label class="f">Taman<input type="text" inputmode="numeric" class="num uang" id="w_taman"></label>
-          <label class="f">Jumlah<input id="w_modal_tot" class="ro num" readonly tabindex="-1"></label>
-        </div>
+        <input id="w_modal_tot" type="hidden">
         <h3>Keluarga dan pinjaman</h3>
+        <p class="note">Saham dan Taman diisi sekali di langkah 1 (Plafon dan angsuran), lalu otomatis masuk ke Aset.</p>
         <div class="fg">
           <label class="f">Jumlah tanggungan (orang)<input type="text" inputmode="numeric" maxlength="2" class="num" id="w_tanggungan"></label>
           <label class="f">Tunggakan bunga pinjaman lama<input type="text" inputmode="numeric" class="num uang" id="w_tunggakan"></label>
@@ -384,7 +384,7 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
       <div class="card"><h3>Aset bersih</h3><table class="wt"><tr class="tot"><td>Aset dikurangi hutang</td><td><input id="w_asetbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
       <div class="card"><h3>Penghasilan bersih</h3><table class="wt"><tr class="tot"><td>Penghasilan dikurangi pengeluaran</td><td><input id="w_hasilbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
     </div>
-    <div class="row"><button class="btn" type="button" data-go="1">Kembali</button><span class="sp"></span><button class="btn primary" type="button" data-go="3">Lanjut ke Periksa &amp; kirim</button></div>
+    <div class="row"><button class="btn" type="button" data-go="1">Kembali</button><span class="sp"></span><button class="btn primary" type="button" data-go="3" id="goS3">Lanjut ke Periksa &amp; kirim</button></div>
   </div>
 
   <!-- langkah 3 -->
@@ -1031,6 +1031,7 @@ function masuk(u){
   S.user=u; $("login").hidden=true; $("app").hidden=false;
   $("pillUser").textContent=u.nama+" · "+(u.peran==="admin"?"Admin":"Staf lapangan"); $("pillUser").classList.toggle("adm",u.peran==="admin");
   document.querySelectorAll("#menu .staf-grp").forEach(function(el){ el.hidden=!isAdmin(); });
+  document.querySelectorAll(".hanya-admin").forEach(function(el){ el.hidden=!isAdmin(); });
   document.querySelectorAll("#menu .admin").forEach(function(el){ el.hidden=!isAdmin(); });
   infoFolder(); infoAnggota(); hitungBadge();
   buka(S.view && bolehLihat(S.view) ? S.view : (isAdmin()?"beranda":"pengajuan"));
@@ -1103,10 +1104,14 @@ function hitung(){
   $("rPct").textContent=$("fBungaIn").value?"("+$("fBungaIn").value+"%)":"";
   $("rPokok").value=a?rp(a.pokok):""; $("rBunga").value=a?rp(a.bunga):""; $("rJml").value=a?rp(a.jml):"";
   $("rCatatan").textContent=a?(m==="flat"?"Bunga flat: sama setiap bulan.":m==="menurun"?"Angsuran ke-1. Bunga turun mengikuti sisa pokok.":"Angsuran ke-1. Total bulanan tetap, pokok naik tiap bulan."):"";
-  var h="",sp=0,sb=0,sj=0;
-  rows.forEach(function(x){ sp+=x.pokok; sb+=x.bunga; sj+=x.pokok+x.bunga; h+="<tr><td>"+tglPendek(x.tgl)+"</td><td class='r'>"+x.ke+"</td><td class='r num'>"+rp(x.pokok)+"</td><td class='r num'>"+rp(x.bunga)+"</td><td class='r num'>"+rp(x.pokok+x.bunga)+"</td></tr>"; });
-  document.querySelector("#tAng tbody").innerHTML=h||"<tr><td colspan='5' class='empty'>Isi jumlah, jangka waktu, bunga, dan cara pembayaran.</td></tr>";
-  $("aPokok").textContent=rp(sp); $("aBunga").textContent=rp(sb); $("aJml").textContent=rp(sj);
+  var h="",sp=0,sb=0,st=0,sj=0,saldo=jumlah;
+  if(rows.length) h+="<tr><td class='r'>0</td><td>"+tglPendek(tg)+"</td><td colspan='5'><i>Pinjaman yang dicairkan</i></td><td class='r num'><b>"+rp(jumlah)+"</b></td></tr>";
+  rows.forEach(function(x){ saldo-=x.pokok; sp+=x.pokok; sb+=x.bunga; st+=x.tab; sj+=x.jml;
+    h+="<tr><td class='r'>"+x.ke+"</td><td>"+tglPendek(x.tgl)+"</td><td>Angsuran ke-"+x.ke+"</td><td class='r num'>"+rp(x.pokok)+"</td><td class='r num'>"+rp(x.bunga)+"</td><td class='r num'>"+rp(x.tab)+"</td><td class='r num'>"+rp(x.jml)+"</td><td class='r num'>"+rp(Math.max(0,saldo))+"</td></tr>"; });
+  document.querySelector("#tAng tbody").innerHTML=h||"<tr><td colspan='8' class='empty'>Isi jumlah, jangka waktu, bunga, dan cara pembayaran.</td></tr>";
+  $("aPokok").textContent=rp(sp); $("aBunga").textContent=rp(sb); $("aTab").textContent=rp(st); $("aJml").textContent=rp(sj);
+  var an=S.anggota||{}, co=P.caraPembayaran.filter(function(r){ return r[0]===$("fCara").value; })[0];
+  $("jHead").innerHTML=rows.length?"<dl class='kv' style='margin-top:8px'><dt>No. BA</dt><dd>"+esc(an.ba||"-")+"</dd><dt>Nama</dt><dd>"+esc(an.nama||"-")+"</dd><dt>Jumlah cair</dt><dd>"+rp(jumlah)+"</dd><dt>Jangka waktu</dt><dd>"+n+" bulan</dd><dt>Suku bunga</dt><dd>"+esc($("fBungaIn").value)+"% "+esc(co?co[1]:"")+"</dd></dl>":"";
   return rows;
 }
 ["fTgl","fPersen","fJangka","fBungaIn"].forEach(function(id){ $(id).addEventListener("input",hitung); $(id).addEventListener("change",hitung); });
@@ -1244,6 +1249,35 @@ function buatPayload(){
     wawancara:bacaWaw() };
 }
 
+/* urutan pindah isian dengan tombol Tab / Enter (seperti aplikasi lama) */
+var URUTAN={
+  1:["btnBrowse","fTgl","fJumlah","fTujuan","fJenis","fCara","fJangka","fBungaIn","fKe","#tPinj","fRiwayat","fTunggak","w_saham","w_taman","fPersen","rTab","goS2"],
+  2:["w_tanggungan","w_tunggakan","btnPenjamin","l_kerja","l_sumber","l_tinggal","l_setuju","l_legal","l_aman","j_nama","j_legal","j_atas","j_hub","j_nomor","j_luas","j_jarak","j_nilai","j_utara","j_selatan","j_barat","j_timur","#blok:pg","#blok:pk","#blok:as","#blok:ht","goS3"],
+  3:["btnSimpan","btnBersih"]
+};
+function daftarFokus(){
+  var out=[];
+  (URUTAN[S.step]||[]).forEach(function(k){
+    if(k==="#tPinj") tbodyP.querySelectorAll("input").forEach(function(el){ out.push(el); });
+    else if(k.indexOf("#blok:")===0){ var kode=k.slice(6); WAW[kode].forEach(function(r){ var el=$("w_"+kode+"_"+r[0]); if(el) out.push(el); }); }
+    else { var el=$(k); if(el) out.push(el); }
+  });
+  return out.filter(function(el){ return !el.disabled && !el.readOnly && el.offsetParent!==null; });
+}
+$("v-pengajuan").addEventListener("keydown",function(e){
+  var t=e.target; if(!t||!t.closest||!t.closest(".step.on")) return;
+  var isField=/^(INPUT|SELECT)$/.test(t.tagName);
+  if(e.key==="Enter"&&!isField) return;            /* Enter di tombol tetap menekan tombol */
+  if(e.key!=="Tab"&&e.key!=="Enter") return;
+  if(e.key==="Enter"&&t.tagName==="SELECT"&&e.altKey) return;
+  var list=daftarFokus(), i=list.indexOf(t); if(i<0) return;
+  e.preventDefault();
+  var j=i+((e.shiftKey&&e.key==="Tab")?-1:1);
+  if(j<0) j=0; if(j>=list.length) j=list.length-1;
+  var n=list[j]; n.focus(); if(n.select&&n.tagName==="INPUT") n.select();
+  n.scrollIntoView({block:"nearest"});
+});
+
 /* kelengkapan dan petunjuk */
 function kelengkapan(){
   var v=nilaiForm(), pg=jumlahBlok("pg");
@@ -1270,7 +1304,7 @@ function bukaStep(n){
   petunjuk(); window.scrollTo(0,0);
 }
 document.querySelectorAll("#steps button").forEach(function(b){ b.addEventListener("click",function(){ bukaStep(+b.dataset.s); }); });
-document.querySelectorAll("[data-go]").forEach(function(b){ b.addEventListener("click",function(){ bukaStep(+b.dataset.go); }); });
+document.querySelectorAll("[data-go]").forEach(function(b){ b.addEventListener("click",function(){ bukaStep(+b.dataset.go); var f=daftarFokus()[0]; if(f) setTimeout(function(){ f.focus(); },30); }); });
 function petunjuk(){
   var k=kelengkapan(), s1=k.filter(function(x){ return x[2]===1; }), s2=k.filter(function(x){ return x[2]===2; });
   var ok1=s1.every(function(x){ return x[1]; }), ok2=s2.every(function(x){ return x[1]; });
@@ -1321,7 +1355,7 @@ $("btnSimpan").addEventListener("click",async function(){
 });
 function bersihkan(){
   S.anggota=null; S.penjamin=null; tampilAnggota();
-  ["fJumlah","fTujuan","fKe","fSimp","fPersen","fJangka","fBungaIn","fTunggak"].forEach(function(id){ $(id).value=""; });
+  ["fJumlah","fTujuan","fKe","fSimp","fPersen","fJangka","fBungaIn","fTunggak","w_saham","w_taman"].forEach(function(id){ $(id).value=""; });
   $("fJenis").value=""; $("fJenisKode").value=""; $("fCara").value=""; $("fCaraKode").value=""; $("fRiwayat").value="";
   $("fTgl").value=isoOf(new Date()); $("rTab").value=rp(P.tabunganDefault||0);
   document.querySelectorAll("#s2 input,#s2 select").forEach(function(el){ if(!el.readOnly) el.value=""; });
@@ -1571,6 +1605,10 @@ function detail5c(){
     "<div class='fg'>"+[["Jumlah",rpp(d.jumlah)],["Jangka",d.jangka_bulan+" bulan"],["Angsuran ke-1",rpp(x.angsBaru)],["Tujuan",d.tujuan],["Penghasilan",rpp(((d.wawancara||{}).total||{}).penghasilan)],["Rasio angsuran",x.dsr<999?pct1(x.dsr):"-"]].map(function(k){ return "<div><div class='note'>"+k[0]+"</div><b>"+esc(k[1])+"</b></div>"; }).join("")+"</div>"+
     "<div class='big'><b class='num'>"+(x.isGugur?"—":Math.round(x.skor))+"</b><div><span class='chip "+h[1]+"'>"+h[0]+"</span><div class='note' style='max-width:60ch;margin-top:4px'>"+esc(h[2])+"</div></div></div>"+
     "<div class='reason'>"+esc(alasan)+"</div>"+
+    "<div class='card noprint' style='background:var(--bg)'><div class='card-head'><h3>Koreksi admin</h3><span class='note'>Jika taksiran staf perlu disesuaikan</span></div><div class='fg'>"+
+      "<label class='f'>Nilai taksiran jaminan (Rp)<input type='text' inputmode='numeric' class='num uang' id='aTaksasi' value='"+rp(((d.wawancara||{}).jaminan||{}).nilai_taksiran||0)+"'></label>"+
+      "<label class='f'>Barang jaminan (isian staf)<input class='ro' readonly tabindex='-1' value='"+esc(((d.wawancara||{}).jaminan||{}).nama_barang||"-")+"'></label></div>"+
+      "<div class='row'><button class='btn' type='button' id='btnTaksasi'>Simpan taksiran</button></div></div>"+
     "<div><h4 style='margin-bottom:6px'>Aturan gugur</h4><div class='cek'>"+x.gugur.map(function(g){ return "<div class='"+(g.lolos?"y":"n")+"'><span class='m'>"+(g.lolos?"✓":"✗")+"</span>"+esc(g.nama)+": <b>"+esc(g.nilai)+"</b></div>"; }).join("")+"</div>"+
     (x.berjalan?"<label class='check noprint' style='margin-top:8px'><input type='checkbox' id='n5Lunasi' "+(x.lunasi?"checked":"")+"> <span>Sisa pinjaman berjalan dilunasi dari pinjaman baru (angsuran CU lama tidak dihitung)</span></label>":"")+"</div>"+
     "<div style='display:flex;flex-direction:column;gap:10px'>"+pilarH+"</div>"+
@@ -1585,7 +1623,12 @@ function detail5c(){
     if(this.value===""){ delete n[this.dataset.k]; delete n[this.dataset.k+"_i"]; } else { var pr=this.value.split("|"); n[this.dataset.k]=+pr[0]; n[this.dataset.k+"_i"]=+pr[1]; }
     await KV.set("nilai5c",S.nilai); render5c(); hitungBadge(); }); });
   if($("n5Lunasi")) $("n5Lunasi").addEventListener("change",async function(){ n._lunasi=this.checked; await KV.set("nilai5c",S.nilai); render5c(); });
-  attachUang($("kPlafon"));
+  attachUang($("kPlafon")); attachUang($("aTaksasi"));
+  $("btnTaksasi").addEventListener("click",async function(){
+    d.wawancara=d.wawancara||{}; d.wawancara.jaminan=d.wawancara.jaminan||{};
+    d.wawancara.jaminan.nilai_taksiran=numOf($("aTaksasi")); r.taksasi_oleh=S.user.nama;
+    await simpanAdmin(); render5c(); toast("Nilai taksiran dikoreksi. Skor 5C dihitung ulang.","ok");
+  });
   $("btnKep").addEventListener("click",async function(){
     var hs=$("kHasil").value; if(!hs){ toast("Pilih keputusan lebih dulu.","bad"); return; }
     S.kep[r.id]={hasil:hs,plafon:numOf($("kPlafon")),catatan:$("kCatatan").value.trim(),oleh:$("kOleh").value.trim(),tgl:new Date().toISOString()};
