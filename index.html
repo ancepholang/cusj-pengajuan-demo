@@ -75,6 +75,7 @@ main{padding:18px 16px 60px;min-width:0}
 .card-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;justify-content:space-between}
 .lead{color:var(--muted);max-width:75ch}
 .note{font-size:13px;color:var(--muted)}
+.cols .full{grid-column:1 / -1}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;align-items:stretch}
 .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px 14px;align-items:end}
 .fg .w2{grid-column:span 2} @media (max-width:520px){.fg .w2{grid-column:auto}}
@@ -126,7 +127,7 @@ td.r,th.r{text-align:right}
 tbody tr:last-child td{border-bottom:0}
 tr.done td{color:#8a948f}
 tr.click{cursor:pointer} tr.click:hover td,tr.sel td{background:var(--accent-soft)}
-table.edit td{padding:0} table.edit td input{border:0;border-radius:0;height:36px;background:transparent}
+table.edit{table-layout:fixed;min-width:640px} table.edit td{padding:0} table.edit td input{padding:6px 10px;text-overflow:ellipsis} table.edit td input{border:0;border-radius:0;height:36px;background:transparent}
 table.edit td input:focus{background:#fff;outline:2px solid var(--accent);outline-offset:-2px}
 table.edit td.idx{width:32px;text-align:center;color:var(--muted);background:#f6f8f7;font-size:12px}
 tfoot td{background:#f6f8f7;font-weight:600}
@@ -290,9 +291,9 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
       </div>
     </div>
     <div class="cols">
-      <div class="card">
+      <div class="card full">
         <div class="card-head"><h3>Pinjaman berjalan</h3><span class="note">Salin dari RDP</span></div>
-        <div class="tw"><table class="edit" id="tPinj">
+        <div class="tw"><table class="edit" id="tPinj"><colgroup><col style="width:40px"><col style="width:24%"><col><col style="width:20%"><col style="width:20%"></colgroup>
           <thead><tr><th></th><th>Rekening</th><th>Deskripsi</th><th class="r">Saldo</th><th class="r">Jml pinjaman</th></tr></thead>
           <tbody></tbody>
           <tfoot><tr><td class="idx"></td><td colspan="2">Total (<span id="pCount">0</span> pinjaman)</td><td class="r" id="pSaldo">0</td><td class="r" id="pJml">0</td></tr></tfoot>
