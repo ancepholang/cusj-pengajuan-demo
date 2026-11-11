@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0f5c4a">
 <link rel="manifest" href="manifest.json">
-<title>KSP CU Semandang Jaya - Pengajuan Pinjaman</title>
+<title>Adum Pinjaman 2.1 - KSP CU Semandang Jaya</title>
 <script>
 /* pilihan.js: di aplikasi desktop diambil dari folder data (bisa diedit), di browser dari file di sebelah halaman. */
 (function(){ try{ if(window.desktop&&window.desktop.pilihanTeks){ var t=window.desktop.pilihanTeks(); if(t){ (0,eval)(t); } } }catch(e){} })();
@@ -208,6 +208,7 @@ table.rv-t tr.tot td{border-top:1px solid var(--ink);border-bottom:0;font-weight
 .rv-jadwal{max-height:440px} .rv-jadwal thead th{position:sticky;top:0;z-index:1}
 .rv-cetak .row{flex-wrap:wrap;gap:8px}
 #cetakArea{display:none}
+.versi{font-size:12px;font-weight:600;color:var(--muted);background:var(--ro);border:1px solid var(--line);border-radius:99px;padding:1px 8px;vertical-align:3px;margin-left:4px;letter-spacing:0}
 /* ===== tema modern ===== */
 :root{ --bg:#edf2ef; --line:#dbe3df; --ink:#13201b; --muted:#5f6e67; --ro:#f1f5f3;
   --accent:#0e4d3d; --accent-strong:#093b2f; --accent-soft:#e2eee8; --info:#1f6fb2; --warn:#a2650a; --warn-soft:#fdf1dc;
@@ -324,7 +325,7 @@ label.f{font-weight:600;color:#44544d}
 <!-- ======================= LOGIN ======================= -->
 <section id="login">
   <form class="login-box" id="fLogin" autocomplete="off">
-    <div><div class="kop" id="lKop">KSP CU SEMANDANG JAYA</div><h2>Pengajuan Pinjaman</h2></div>
+    <div><div class="kop" id="lKop">KSP CU SEMANDANG JAYA</div><h2>Adum Pinjaman <span class="versi">versi 2.1</span></h2></div>
     <div id="setupBox" hidden class="note">Belum ada pengguna di perangkat ini. Buat akun <b>admin</b> pertama. Admin nanti membuat akun untuk staf.</div>
     <label class="f" id="lNamaWrap" hidden>Nama lengkap<input type="text" id="lNama" maxlength="60"></label>
     <label class="f">Nama pengguna<input type="text" id="lUser" maxlength="30" autocapitalize="off" autocomplete="username"></label>
@@ -340,7 +341,7 @@ label.f{font-weight:600;color:#44544d}
 <div id="app" hidden>
 <header class="top">
   <div class="top-in">
-    <div><div class="kop" id="hKop">KSP CU SEMANDANG JAYA</div><div class="kantor" id="hKantor">001 - HEAD OFFICE</div></div>
+    <div><div class="kop" id="hKop">KSP CU SEMANDANG JAYA</div><div class="kantor">Adum Pinjaman <span class="versi">versi 2.1</span></div></div>
     <div class="who">
       <span class="pill" id="pillFolder"><i></i><span>Kotak surat</span></span>
       <span class="pill" id="pillAnggota"><i></i><span>Daftar anggota</span></span>
@@ -2228,7 +2229,7 @@ $("btnTes").addEventListener("click",async function(){
   try{ var fh=await S.handle.getFileHandle(nm,{create:true}); var w=await fh.createWritable(); await w.write("Tes koneksi dari "+S.user.nama); await w.close(); S.izin="granted"; infoFolder(); toast("Berhasil. File tes masuk ke folder.","ok",7000); }
   catch(e){ toast("Gagal menulis ke folder: "+(e.message||e),"bad",9000); }
 });
-function tampilKantor(){ var k=S.kantor; $("hKop").textContent=k.kop; $("lKop").textContent=k.kop; $("hKantor").textContent=(k.kode?k.kode+" - ":"")+k.nama; $("kKop").value=k.kop; $("kKode").value=k.kode; $("kNama").value=k.nama; $("kAlamat").value=k.alamat; }
+function tampilKantor(){ var k=S.kantor; $("hKop").textContent=k.kop+((k.kode||k.nama)?"  ·  "+(k.kode?k.kode+" - ":"")+k.nama:""); $("lKop").textContent=k.kop; $("kKop").value=k.kop; $("kKode").value=k.kode; $("kNama").value=k.nama; $("kAlamat").value=k.alamat; }
 $("btnKantor").addEventListener("click",async function(){ var k={kop:$("kKop").value.trim(),kode:$("kKode").value.trim(),nama:$("kNama").value.trim(),alamat:$("kAlamat").value.trim()}; if(!k.kop||!k.nama){ toast("Nama koperasi dan nama kantor wajib diisi.","bad"); return; } S.kantor=k; await KV.set("kantor",k); tampilKantor(); toast("Identitas kantor disimpan.","ok"); });
 
 /* bobot 5C dan AHP */

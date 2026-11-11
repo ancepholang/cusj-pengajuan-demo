@@ -1,7 +1,7 @@
 {
-  "name": "KSP CU Semandang Jaya - Pengajuan Pinjaman",
-  "short_name": "Pengajuan CU",
-  "start_url": "KSP.html",
+  "name": "Adum Pinjaman - KSP CU Semandang Jaya",
+  "short_name": "Adum Pinjaman",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f2f4f3",
   "theme_color": "#0f5c4a",
