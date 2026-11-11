@@ -1,0 +1,16 @@
+DEMO APLIKASI PENGAJUAN PINJAMAN - CARA MENARUH DI ALAMAT SENDIRI
+
+Folder ini adalah demo yang sama, siap ditaruh di hosting gratis, tanpa tampilan claude.ai.
+
+PILIHAN A - Vercel (paling cepat)
+1. Buka vercel.com, masuk dengan akun GitHub.
+2. Add New > Project > tarik (drag) folder KSP_Demo ini, atau hubungkan repo GitHub berisi folder ini.
+3. Beri nama proyek, misalnya cusj-pengajuan-demo. Klik Deploy.
+4. Alamatnya: https://cusj-pengajuan-demo.vercel.app  -> kirim ke kadep.
+
+PILIHAN B - GitHub Pages
+1. Buat repo baru (misalnya pengajuan-demo), unggah semua file di folder ini.
+2. Settings > Pages > Source: Deploy from a branch > main > / (root) > Save.
+3. Alamatnya: https://NAMA-AKUN.github.io/pengajuan-demo/
+
+Akun demo: staf / 1111 dan admin / 0000. Data demo fiktif dan tersimpan di browser masing-masing.
