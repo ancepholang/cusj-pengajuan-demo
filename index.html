@@ -50,7 +50,7 @@ header.top{background:var(--surface);border-bottom:1px solid var(--line);positio
 .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.warn i{background:var(--warn)}
 .pill.role{background:var(--accent-soft);color:var(--accent)} .pill.role.adm{background:#5b3d00;color:#fff}
 .shell{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 60px)}
-nav.menu{background:var(--surface);border-right:1px solid var(--line);padding:12px 8px;display:flex;flex-direction:column;gap:2px}
+nav.menu{background:var(--surface);border-right:1px solid var(--line);padding:12px 8px;display:flex;flex-direction:column;gap:2px;position:sticky;top:61px;align-self:start;height:calc(100vh - 61px);overflow-y:auto}
 nav.menu .grp{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:12px 10px 4px}
 nav.menu button{display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;background:none;text-align:left;padding:9px 12px;border-radius:8px;font-weight:600;font-size:14.5px;color:var(--ink);cursor:pointer}
 nav.menu button:hover{background:var(--ro)}
@@ -62,7 +62,7 @@ main{padding:18px 16px 60px;min-width:0}
 @media (max-width:599px){ #pillAnggota{display:none} .top-in{padding:8px 12px} .top-in .kantor{font-size:15px} }
 @media (max-width:899px){
   .shell{display:block}
-  nav.menu{flex-direction:row;flex-wrap:wrap;gap:4px;border-right:0;border-bottom:1px solid var(--line);padding:8px}
+  nav.menu{flex-direction:row;flex-wrap:wrap;gap:4px;border-right:0;border-bottom:1px solid var(--line);padding:8px;position:static;height:auto;overflow:visible}
   nav.menu .grp{display:none}
   nav.menu button{flex:none;white-space:nowrap;padding:7px 12px;font-size:14px;border:1px solid var(--line)}
   nav.menu button.admin{border-color:#c9b98a;background:#fbf6e8}
@@ -75,18 +75,18 @@ main{padding:18px 16px 60px;min-width:0}
 .card-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;justify-content:space-between}
 .lead{color:var(--muted);max-width:75ch}
 .note{font-size:13px;color:var(--muted)}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;align-items:start}
-.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px 12px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;align-items:stretch}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px 14px;align-items:end}
 .fg .w2{grid-column:span 2} @media (max-width:520px){.fg .w2{grid-column:auto}}
 label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted);min-width:0}
-label.f .req{color:var(--bad)}
+label.f .req{color:var(--bad);font-weight:700} label.f .lt{display:block}
 input:not([type]),input[type=text],input[type=date],input[type=number],input[type=password],select,textarea{width:100%;min-width:0;height:38px;padding:6px 10px;border:1px solid #b9c3be;border-radius:7px;background:#fff;font-weight:400;font-size:15px;color:var(--ink)}
 textarea{height:auto;min-height:70px;resize:vertical}
 input.ro,input[readonly]{background:var(--ro);border-color:var(--line);color:var(--ink)}
 input.num{text-align:right}
 input.neg{color:var(--bad)}
 .inline{display:flex;gap:6px;align-items:center}
-.inline input.kode{flex:0 0 64px} .inline select,.inline input:not(.kode){flex:1 1 auto}
+.inline input.kode{display:none} .inline select,.inline input:not(.kode){flex:1 1 auto}
 .check{display:flex;gap:8px;align-items:flex-start;font-size:14px;cursor:pointer}
 .check input{margin-top:3px;width:17px;height:17px}
 .btn{height:38px;border:1px solid #b9c3be;background:var(--surface);padding:0 16px;border-radius:7px;cursor:pointer;font-weight:600;font-size:14.5px;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
@@ -259,6 +259,7 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
     </div>
   </div>
   <div class="guide" id="guide" role="status" aria-live="polite"></div>
+  <p class="note">Isian bertanda <b style="color:var(--bad)">*</b> wajib diisi.</p>
 
   <!-- langkah 1 -->
   <div class="step on" id="s1">
@@ -278,9 +279,9 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
         <h3>Permohonan</h3>
         <div class="fg">
           <label class="f">Tanggal mengajukan<input type="date" id="fTgl"></label>
-          <label class="f">Jumlah diajukan (Rp) <span class="req">wajib</span><input type="text" inputmode="numeric" class="num uang" id="fJumlah"></label>
+          <label class="f"><span class="lt">Jumlah diajukan (Rp) <b class="req" title="wajib diisi">*</b></span><input type="text" inputmode="numeric" class="num uang" id="fJumlah"></label>
           <label class="f w2">Terbilang<input id="fTerbilang" class="ro" readonly tabindex="-1"></label>
-          <label class="f w2">Tujuan pinjaman <span class="req">wajib</span><input type="text" id="fTujuan" maxlength="120"></label>
+          <label class="f w2"><span class="lt">Tujuan pinjaman <b class="req" title="wajib diisi">*</b></span><input type="text" id="fTujuan" maxlength="120"></label>
           <label class="f">Jenis pinjaman<span class="inline"><input class="ro kode" id="fJenisKode" readonly tabindex="-1"><select id="fJenis"></select></span></label>
           <label class="f">Cara pembayaran<span class="inline"><input class="ro kode" id="fCaraKode" readonly tabindex="-1"><select id="fCara"></select></span></label>
           <label class="f">Jangka waktu (bulan)<input type="text" inputmode="numeric" maxlength="3" class="num" id="fJangka"></label>
@@ -294,10 +295,10 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
         <div class="tw"><table class="edit" id="tPinj">
           <thead><tr><th></th><th>Rekening</th><th>Deskripsi</th><th class="r">Saldo</th><th class="r">Jml pinjaman</th></tr></thead>
           <tbody></tbody>
-          <tfoot><tr><td id="pCount" class="r">0</td><td colspan="2">Total</td><td class="r" id="pSaldo">0</td><td class="r" id="pJml">0</td></tr></tfoot>
+          <tfoot><tr><td class="idx"></td><td colspan="2">Total (<span id="pCount">0</span> pinjaman)</td><td class="r" id="pSaldo">0</td><td class="r" id="pJml">0</td></tr></tfoot>
         </table></div>
         <div class="fg">
-          <label class="f">Riwayat bayar di CU (RDP) <span class="req">wajib</span>
+          <label class="f"><span class="lt">Riwayat bayar di CU (RDP) <b class="req" title="wajib diisi">*</b></span>
             <select id="fRiwayat"><option value="">Pilih</option><option value="5">Selalu tepat waktu</option><option value="4">Telat ≤ 7 hari sesekali</option><option value="3">Telat 8–30 hari</option><option value="2">Pernah menunggak 31–90 hari</option><option value="1">Menunggak 31–90 hari berulang</option><option value="0">Belum pernah pinjam</option></select></label>
           <label class="f">Tunggakan saat ini (hari)<input type="text" inputmode="numeric" maxlength="4" class="num" id="fTunggak" placeholder="0"></label>
         </div>
@@ -344,13 +345,13 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
       <div class="card">
         <div class="card-head"><h3>Pengamatan lapangan</h3><span class="note">Dipakai untuk Analisis 5C</span></div>
         <div class="fg">
-          <label class="f w2">Pekerjaan pemohon <span class="req">wajib</span><select id="l_kerja"><option value="">Pilih</option>
+          <label class="f w2"><span class="lt">Pekerjaan pemohon <b class="req" title="wajib diisi">*</b></span><select id="l_kerja"><option value="">Pilih</option>
             <option value="5">Pekerjaan stabil lebih dari 5 tahun</option>
             <option value="3">Pekerjaan stabil kurang dari 5 tahun</option>
             <option value="4">Tidak bekerja, pasangan bekerja stabil &gt; 5 tahun dan menyetujui</option>
             <option value="2">Tidak bekerja, pasangan bekerja stabil &lt; 5 tahun dan menyetujui</option>
             <option value="1">Tidak bekerja / penghasilan tidak mencukupi</option></select></label>
-          <label class="f">Sumber pendapatan tetap <span class="req">wajib</span><select id="l_sumber"><option value="">Pilih</option>
+          <label class="f"><span class="lt">Sumber pendapatan tetap <b class="req" title="wajib diisi">*</b></span><select id="l_sumber"><option value="">Pilih</option>
             <option value="bulanan">Harian, mingguan, atau bulanan</option><option value="triwulan">Tiga bulanan</option><option value="semester">Semesteran</option></select></label>
           <label class="f">Lama tinggal di rumah sendiri<select id="l_tinggal"><option value="">Pilih</option>
             <option value="0">Kurang dari 2 tahun / tidak menetap</option><option value="1">3–5 tahun</option><option value="2">Di atas 5 tahun</option></select></label>
@@ -642,16 +643,16 @@ code{font-family:Consolas,"Courier New",monospace;font-size:13px;background:var(
   <div class="db">
     <p class="note">Data dikirim ke admin dengan status belum punya No. BA.</p>
     <div class="fg">
-      <label class="f">Nama lengkap <span class="req">wajib</span><input type="text" id="nNama"></label>
+      <label class="f"><span class="lt">Nama lengkap <b class="req" title="wajib diisi">*</b></span><input type="text" id="nNama"></label>
       <label class="f">Nama panggilan<input type="text" id="nPanggil"></label>
-      <label class="f">Jenis kelamin <span class="req">wajib</span><select id="nJK"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select></label>
+      <label class="f"><span class="lt">Jenis kelamin <b class="req" title="wajib diisi">*</b></span><select id="nJK"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select></label>
       <label class="f">Tempat lahir<input type="text" id="nTempat"></label>
       <label class="f">Tanggal lahir<input type="date" id="nLahir"></label>
-      <label class="f">NIK <span class="req">16 angka</span><input type="text" inputmode="numeric" maxlength="16" id="nNIK"></label>
+      <label class="f"><span class="lt">NIK <b class="req" title="wajib diisi">* 16 angka</b></span><input type="text" inputmode="numeric" maxlength="16" id="nNIK"></label>
       <label class="f">No. telepon<input type="text" inputmode="tel" id="nHP"></label>
       <label class="f">Pekerjaan<input type="text" id="nKerja"></label>
       <label class="f">No. NPWP<input type="text" id="nNPWP"></label>
-      <label class="f w2">Alamat <span class="req">wajib</span><input type="text" id="nAlamat"></label>
+      <label class="f w2"><span class="lt">Alamat <b class="req" title="wajib diisi">*</b></span><input type="text" id="nAlamat"></label>
       <label class="f">Desa<input type="text" id="nDesa"></label>
       <label class="f">Kecamatan<input type="text" id="nKec"></label>
       <label class="f">Kabupaten<input type="text" id="nKab"></label>
@@ -1061,8 +1062,8 @@ document.querySelectorAll("#menu button").forEach(function(b){ b.addEventListene
    ===================================================================== */
 function isiPilihan(){
   var j=$("fJenis"), c=$("fCara");
-  j.innerHTML='<option value="">Pilih jenis pinjaman</option>'+P.jenisPinjaman.map(function(r){ return '<option value="'+esc(r[0])+'">'+esc(r[1])+'</option>'; }).join("");
-  c.innerHTML='<option value="">Pilih cara pembayaran</option>'+P.caraPembayaran.map(function(r){ return '<option value="'+esc(r[0])+'" data-metode="'+esc(r[2])+'">'+esc(r[1])+'</option>'; }).join("");
+  j.innerHTML='<option value="">Pilih jenis pinjaman</option>'+P.jenisPinjaman.map(function(r){ return '<option value="'+esc(r[0])+'">'+esc(r[0]+' - '+r[1])+'</option>'; }).join("");
+  c.innerHTML='<option value="">Pilih cara pembayaran</option>'+P.caraPembayaran.map(function(r){ return '<option value="'+esc(r[0])+'" data-metode="'+esc(r[2])+'">'+esc(r[0]+' - '+r[1])+'</option>'; }).join("");
 }
 function namaJenis(kode){ for(var i=0;i<P.jenisPinjaman.length;i++) if(P.jenisPinjaman[i][0]===kode) return P.jenisPinjaman[i][1]; return ""; }
 $("fJenis").addEventListener("change",function(){ $("fJenisKode").value=this.value; });
@@ -1234,7 +1235,7 @@ function buatPayload(){
     anggota:{nama:a.nama,no_ba:a.baru?"":a.ba,tgl_jadi_anggota:a.baru?"":a.tgl,anggota_baru:!!a.baru},
     lama_anggota:$("fLama").value, pinjaman_ke:$("fKe").value?+$("fKe").value:null, tgl_pengajuan:$("fTgl").value,
     jumlah:v.jumlah, terbilang:terbilang(v.jumlah), tujuan:v.tujuan, jenis_pinjaman:{kode:v.jenis,nama:namaJenis(v.jenis)},
-    cara_pembayaran:{kode:v.cara,nama:cOpt&&v.cara?cOpt.textContent:"",metode:v.metode}, jangka_bulan:v.jangka, suku_bunga_persen_per_bulan:v.bunga,
+    cara_pembayaran:{kode:v.cara,nama:(P.caraPembayaran.filter(function(r){ return r[0]===v.cara; })[0]||["",""])[1],metode:v.metode}, jangka_bulan:v.jangka, suku_bunga_persen_per_bulan:v.bunga,
     plafon:{simpanan:simp,persen:pct,selisih:simp-v.jumlah*pct/100,plafon_seharusnya:(pct>0&&simp>0)?Math.round(simp/(pct/100)):0},
     rincian:{angsuran_pokok:rows[0]?Math.round(rows[0].pokok):0,bunga:rows[0]?Math.round(rows[0].bunga):0,tabungan:numOf($("rTab")),jumlah:rows[0]?Math.round(rows[0].jml):0},
     pinjaman_berjalan:pj, total_saldo_berjalan:tSaldo, total_jml_berjalan:tJml,
