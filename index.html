@@ -227,6 +227,8 @@ table.s-ttd tr.ruang td{height:64px}
 .rv-cetak .cg-btn{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
 .xl .xt.a5 td{white-space:normal} .xl .xt tr.a5h td{background:#c0c0c0} .xl .xt tr.a5t td{background:#eee}
 .xl .xt.a5skala tr.pilih td{background:#fff2b3;font-weight:700}
+.keu-bar{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap} .keu-bar.kosong{border-color:#ecd39b;background:var(--warn-soft)}
+#dlgKeu .wt input{width:100%}
 .ttd-set{margin-top:4px} .ttd-set .fg{margin-top:8px} .ttd-set .row{margin-top:8px}
 .xl2{position:relative;background:#fff;color:#000;margin:0 auto;font-family:Calibri,Carlito,Arial,sans-serif;font-size:14.7px}
 .xl2 img.xlimg{position:absolute;z-index:1;object-fit:contain}
@@ -537,8 +539,8 @@ label.f{font-weight:600;color:#44544d}
         <label class="f">Batas timur<input type="text" id="j_timur"></label>
       </div>
     </div>
-    <div class="cols" id="wawBlok"></div>
-    <div class="cols">
+    <div class="cols" id="wawBlok" hidden></div>
+    <div class="cols" hidden>
       <div class="card"><h3>Aset bersih</h3><table class="wt"><tr class="tot"><td>Aset dikurangi hutang</td><td><input id="w_asetbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
       <div class="card"><h3>Penghasilan bersih</h3><table class="wt"><tr class="tot"><td>Penghasilan dikurangi pengeluaran</td><td><input id="w_hasilbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
     </div>
@@ -814,6 +816,12 @@ label.f{font-weight:600;color:#44544d}
   <div class="df"><button class="btn" type="button" id="nBatal">Batal</button><button class="btn primary" type="button" id="nSimpan">Simpan anggota baru</button></div>
 </dialog>
 
+<dialog id="dlgKeu" style="width:min(920px,96vw)">
+  <div class="dh" id="kTitle">Keuangan anggota</div>
+  <div class="db"><p class="note">Diisi admin dari hasil wawancara. Isi hanya baris yang ada; jumlah dihitung otomatis.</p><div class="cols" id="kBlok"></div>
+    <div class="cols"><div class="card"><h3>Aset bersih</h3><b id="kAsb" class="num">0</b></div><div class="card"><h3>Penghasilan bersih</h3><b id="kPb" class="num">0</b></div></div></div>
+  <div class="df"><button class="btn" type="button" id="kBatal">Batal</button><button class="btn primary" type="button" id="kSimpan">Simpan</button></div>
+</dialog>
 <dialog id="dlgDetail">
   <div class="dh" id="dTitle">Detail pengajuan</div>
   <div class="db" id="dBody"></div>
@@ -1399,7 +1407,7 @@ function buatPayload(){
 /* urutan pindah isian dengan tombol Tab / Enter (seperti aplikasi lama) */
 var URUTAN={
   1:["btnBrowse","fTgl","fJumlah","fTujuan","fJenis","fCara","fJangka","fBungaIn","fKe","#tPinj","fRiwayat","fTunggak","w_saham","w_taman","fPersen","rTab","goS2"],
-  2:["w_tanggungan","w_tunggakan","btnPenjamin","j_nama","j_legal","j_atas","j_hub","j_nomor","j_luas","j_jarak","j_nilai","j_utara","j_selatan","j_barat","j_timur","#blok:pg","#blok:pk","#blok:as","#blok:ht","goS3"],
+  2:["w_tanggungan","w_tunggakan","btnPenjamin","j_nama","j_legal","j_atas","j_hub","j_nomor","j_luas","j_jarak","j_nilai","j_utara","j_selatan","j_barat","j_timur","#blok:noop","#blok:noop","#blok:as","#blok:ht","goS3"],
   3:["btnSimpan","btnBersih"]
 };
 function daftarFokus(){
@@ -1437,8 +1445,7 @@ function kelengkapan(){
     ["Isi jangka waktu", v.jangka>0, 1, "fJangka"],
     ["Isi suku bunga", v.bunga>0, 1, "fBungaIn"],
     ["Isi tanggal mengajukan", !!$("fTgl").value, 1, "fTgl"],
-    ["Pilih riwayat bayar di CU (lihat RDP)", $("fRiwayat").value!=="", 1, "fRiwayat"],
-    ["Isi penghasilan per bulan", pg>0, 2, "w_pg_gaji"]
+    ["Pilih riwayat bayar di CU (lihat RDP)", $("fRiwayat").value!=="", 1, "fRiwayat"]
   ];
 }
 function bukaStep(n){
@@ -2017,9 +2024,9 @@ function ringkasan(p,target){
   var htR=[["Saldo pinjaman di CU (berjalan)",lama]].concat(WAW.ht.map(function(r){ return [r[1],(w.hutang||{})[r[0]]]; }));
   var bersih=t.penghasilan_bersih||0, asb=t.aset_bersih||0;
   var kartuUang=rvKartu("Penghasilan dan pengeluaran per bulan","<div class='rv-dua'><div><h4>Penghasilan</h4>"+rvList(pgR,t.penghasilan)+"</div><div><h4>Pengeluaran</h4>"+rvList(pkR,t.pengeluaran)+"</div></div>"+
-    "<div class='rv-hasil "+(bersih<0?"bad":"ok")+"'>Penghasilan bersih <b>Rp "+(bersih<0?"−"+rp(-bersih):rp(bersih))+"</b>"+(angs?" · sisa setelah angsuran baru <b>Rp "+rp(bersih-angs)+"</b>":"")+"</div>","2:#blok:pg",live);
+    "<div class='rv-hasil "+(bersih<0?"bad":"ok")+"'>Penghasilan bersih <b>Rp "+(bersih<0?"−"+rp(-bersih):rp(bersih))+"</b>"+(angs?" · sisa setelah angsuran baru <b>Rp "+rp(bersih-angs)+"</b>":"")+"</div>",null,live);
   var kartuAset=rvKartu("Aset dan hutang","<div class='rv-dua'><div><h4>Aset</h4>"+rvList(asR,t.aset)+"</div><div><h4>Hutang</h4>"+rvList(htR,t.hutang)+"</div></div>"+
-    "<div class='rv-hasil "+(asb<0?"bad":"ok")+"'>Aset bersih <b>Rp "+(asb<0?"−"+rp(-asb):rp(asb))+"</b></div>","2:#blok:as",live);
+    "<div class='rv-hasil "+(asb<0?"bad":"ok")+"'>Aset bersih <b>Rp "+(asb<0?"−"+rp(-asb):rp(asb))+"</b></div>",null,live);
   var cak=j.nilai_taksiran&&p.jumlah?Math.round(j.nilai_taksiran/p.jumlah*100):null;
   var kartuJam=rvKartu("Jaminan",rvKv([["Simpanan atas nama",a.nama?a.nama+(a.no_ba?" · "+a.no_ba:""):""],["Simpanan penjamin",pj.nama?pj.nama+" · "+pj.no_ba:"Tidak ada"],["Barang jaminan",j.nama_barang],["Bukti kepemilikan",j.legalitas],["Atas nama",j.atas_nama?j.atas_nama+(j.hubungan?" ("+j.hubungan+")":""):""],
     ["No. SKT / sertifikat",j.nomor],["Luas",j.luas?j.luas+" m²":""],["Jarak dari jalan utama",j.jarak],["Batas",[["U",j.batas_utara],["S",j.batas_selatan],["B",j.batas_barat],["T",j.batas_timur]].filter(function(x){ return x[1]; }).map(function(x){ return x[0]+": "+x[1]; }).join(" · ")],
@@ -2047,7 +2054,8 @@ function renderLive(){ var el=$("docLive"); if(el) el.innerHTML=berkasHtml("docL
 function renderBerkas(){
   var b=S.berkas; if(!b||!b.p){ buka(isAdmin()?"impor":"pengajuan"); return; }
   $("bJudul").textContent="Pengajuan · "+((b.p.anggota||{}).nama||"");
-  $("docBerkas").innerHTML=berkasHtml("docBerkas",b.p);
+  var adaKeu=((b.p.wawancara||{}).total||{}).penghasilan, rec=S.peng.filter(function(x){ return x.id===b.p.id; })[0];
+  $("docBerkas").innerHTML=(isAdmin()&&rec?"<div class='card noprint keu-bar"+(adaKeu?"":" kosong")+"'><div><b>Keuangan anggota</b><div class='note'>"+(adaKeu?"Sudah diisi admin.":"Belum diisi. Penghasilan, pengeluaran, aset, dan hutang diisi admin.")+"</div></div><button class='btn primary' type='button' data-keu='"+esc(rec.id)+"'>"+(adaKeu?"Ubah keuangan anggota":"Isi keuangan anggota")+"</button></div>":"")+berkasHtml("docBerkas",b.p);
 }
 function cetakXl(jenis,p){
   var a=$("cetakArea");
@@ -2194,7 +2202,7 @@ function detail5c(){
         "<div class='pt num'>"+(i.v==null?"–":num(i.v))+"</div></div>"; }).join("")+"</div>";
   }).join("");
   $("d5c").innerHTML="<div class='card'>"+
-    "<div class='card-head'><div><h3>Analisis 5C · "+esc(d.anggota.nama)+"</h3><p class='note'>"+esc(d.anggota.no_ba||"anggota baru")+" · "+esc((d.kantor||{}).nama||"")+" · staf "+esc(d.staf)+" · "+tgl(d.tgl_pengajuan)+"</p></div><div class='row noprint'><button class='btn' type='button' id="+"'btnCetak5c'"+">Cetak lembar</button></div></div>"+
+    "<div class='card-head'><div><h3>Analisis 5C · "+esc(d.anggota.nama)+"</h3><p class='note'>"+esc(d.anggota.no_ba||"anggota baru")+" · "+esc((d.kantor||{}).nama||"")+" · staf "+esc(d.staf)+" · "+tgl(d.tgl_pengajuan)+"</p></div><div class='row noprint'><button class='btn primary' type='button' data-keu='"+esc(r.id)+"'>"+(((d.wawancara||{}).total||{}).penghasilan?"Ubah keuangan anggota":"Isi keuangan anggota")+"</button><button class='btn' type='button' id="+"'btnCetak5c'"+">Cetak lembar</button></div></div>"+
     "<div class='fg'>"+[["Jumlah",rpp(d.jumlah)],["Jangka",d.jangka_bulan+" bulan"],["Angsuran ke-1",rpp(x.angsBaru)],["Tujuan",d.tujuan],["Penghasilan",rpp(((d.wawancara||{}).total||{}).penghasilan)],["Rasio angsuran",x.dsr<999?pct1(x.dsr):"-"]].map(function(k){ return "<div><div class='note'>"+k[0]+"</div><b>"+esc(k[1])+"</b></div>"; }).join("")+"</div>"+
     "<div class='big'><b class='num'>"+(x.isGugur?"—":Math.round(x.skor))+"</b><div><span class='chip "+h[1]+"'>"+h[0]+"</span><div class='note' style='max-width:60ch;margin-top:4px'>"+esc(h[2])+"</div></div></div>"+
     "<div class='reason'>"+esc(alasan)+"</div>"+
@@ -2281,6 +2289,44 @@ function proses(tipe,berkas){
   });
   return {baru:baru,ada:ada,lain:lain,rusak:rusak,diterima:diterima};
 }
+
+/* ---------- Keuangan anggota (diisi admin) ---------- */
+var keuId=null;
+function blokK(kode,judul,atas,totalLabel){
+  var h="<div class='card'><h3>"+judul+"</h3><table class='wt'>";
+  if(atas) h+="<tr><td>"+atas[0]+"</td><td><input class='ro num' readonly tabindex='-1' value='"+rp(atas[1])+"'></td></tr>";
+  WAW[kode].forEach(function(r){ h+="<tr><td><label for='k_"+kode+"_"+r[0]+"'>"+r[1]+"</label></td><td><input type='text' inputmode='numeric' class='num uang' id='k_"+kode+"_"+r[0]+"'></td></tr>"; });
+  return h+"<tr class='tot'><td>"+totalLabel+"</td><td><input class='ro num' id='k_"+kode+"_tot' readonly tabindex='-1'></td></tr></table></div>";
+}
+function hitungKeu(){
+  var r=S.peng.filter(function(x){ return x.id===keuId; })[0]; if(!r) return null;
+  var d=r.data, w=d.wawancara||{}, m=w.modal||{}, modal=(m.saham||0)+(m.taman||0), saldo=d.total_saldo_berjalan||0, o={};
+  ["pg","pk","as","ht"].forEach(function(k){ o[k]={}; o[k+"t"]=0; WAW[k].forEach(function(r){ var v=numOf($("k_"+k+"_"+r[0])); o[k][r[0]]=v; o[k+"t"]+=v; }); });
+  o.ast+=modal; o.htt+=saldo;
+  ["pg","pk","as","ht"].forEach(function(k){ $("k_"+k+"_tot").value=rp(o[k+"t"]); });
+  $("kAsb").textContent="Rp "+rp(o.ast-o.htt); $("kPb").textContent="Rp "+rp(o.pgt-o.pkt);
+  return o;
+}
+function bukaKeu(id){
+  var r=S.peng.filter(function(x){ return x.id===id; })[0]; if(!r) return; keuId=id;
+  var d=r.data, w=d.wawancara||{}, m=w.modal||{};
+  $("kTitle").textContent="Keuangan anggota · "+((d.anggota||{}).nama||"");
+  $("kBlok").innerHTML=blokK("pg","Penghasilan per bulan",null,"Jumlah penghasilan")+blokK("pk","Pengeluaran per bulan",null,"Jumlah pengeluaran")+
+    blokK("as","Aset",["Tabungan di CU SJ (dari modal)",(m.saham||0)+(m.taman||0)],"Jumlah aset")+blokK("ht","Hutang",["Saldo pinjaman (pinjaman berjalan)",d.total_saldo_berjalan||0],"Jumlah hutang");
+  var src={pg:w.penghasilan,pk:w.pengeluaran,as:w.aset,ht:w.hutang};
+  ["pg","pk","as","ht"].forEach(function(k){ WAW[k].forEach(function(r){ var el=$("k_"+k+"_"+r[0]), v=(src[k]||{})[r[0]]; el.value=v?rp(v):""; attachUang(el); el.addEventListener("input",hitungKeu); }); });
+  hitungKeu(); $("dlgKeu").showModal();
+}
+document.addEventListener("click",function(e){ var b=e.target.closest("button[data-keu]"); if(b) bukaKeu(b.dataset.keu); });
+$("kBatal").addEventListener("click",function(){ $("dlgKeu").close(); });
+$("kSimpan").addEventListener("click",async function(){
+  var r=S.peng.filter(function(x){ return x.id===keuId; })[0], o=hitungKeu(); if(!r||!o) return;
+  var w=r.data.wawancara=r.data.wawancara||{};
+  w.penghasilan=o.pg; w.pengeluaran=o.pk; w.aset=o.as; w.hutang=o.ht;
+  w.total={aset:o.ast,hutang:o.htt,aset_bersih:o.ast-o.htt,penghasilan:o.pgt,pengeluaran:o.pkt,penghasilan_bersih:o.pgt-o.pkt};
+  r.data.keuangan_oleh=S.user?S.user.nama:""; await simpanAdmin(); $("dlgKeu").close(); toast("Keuangan anggota disimpan. Skor 5C dihitung ulang.","ok");
+  if(S.view==="analisa") render5c(); if(S.view==="berkas"){ if(S.berkas) S.berkas.p=r.data; renderBerkas(); } if(S.view==="impor") renderPeng();
+});
 async function simpanAdmin(){ await Promise.all([KV.set("peng",S.peng),KV.set("baru",S.baru)]); hitungBadge(); }
 async function impor(tipe,msgId,berkas,dariFolder){
   var r=proses(tipe,berkas); await simpanAdmin(); var pindah=0;
