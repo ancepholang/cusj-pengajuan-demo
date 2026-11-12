@@ -222,7 +222,9 @@ table.s-ttd tr.ruang td{height:64px}
 .surat-p{margin:10px 0 4px;font-size:12.5px}
 .xl .xt.slip-ttd{margin-top:12px;text-align:center} .xl .xt.slip-ttd td{text-align:center;width:25%;white-space:normal} .xl .xt.slip-ttd tr.ruang td{height:70px}
 .surat .ind.nomor{display:flex;gap:6px} .surat .ind.nomor>span{padding-top:1px;min-width:16px} .surat .ind.nomor>table{flex:1}
-.btn-cetak{gap:8px;border-color:var(--accent);color:var(--accent)} .btn-cetak:hover{background:var(--accent-soft)}
+.btn-cetak{gap:8px;border-color:var(--line);color:var(--accent);justify-content:flex-start;width:100%;height:auto;min-height:42px;padding:8px 12px;white-space:normal;text-align:left;line-height:1.25} .btn-cetak svg{flex:none} .btn-cetak:hover{background:var(--accent-soft);border-color:var(--accent)}
+.rv-cetak .cg{border-top:1px solid var(--line);padding-top:12px} .rv-cetak .cg h4{margin:0 0 8px;font-size:13px;color:var(--muted);font-weight:650}
+.rv-cetak .cg-btn{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
 .xl .xt.a5 td{white-space:normal} .xl .xt tr.a5h td{background:#c0c0c0} .xl .xt tr.a5t td{background:#eee}
 .xl .xt.a5skala tr.pilih td{background:#fff2b3;font-weight:700}
 .ttd-set{margin-top:4px} .ttd-set .fg{margin-top:8px} .ttd-set .row{margin-top:8px}
@@ -499,8 +501,8 @@ label.f{font-weight:600;color:#44544d}
           <label class="f w2">Simpanan penjamin atas nama<span class="inline"><input id="w_penjamin" class="ro" readonly tabindex="-1"><button class="btn small" type="button" id="btnPenjamin">Cari</button><button class="btn small" type="button" id="btnPenjaminHapus">Hapus</button></span></label>
         </div>
       </div>
-      <div class="card">
-        <div class="card-head"><h3>Pengamatan lapangan</h3><span class="note">Dipakai untuk Analisis 5C</span></div>
+      <div class="card" hidden>
+        <div class="card-head"><h3>Pengamatan lapangan</h3><span class="note">Dinilai admin di Analisis 5C</span></div>
         <div class="fg">
           <label class="f w2"><span class="lt">Pekerjaan pemohon <b class="req" title="wajib diisi">*</b></span><select id="l_kerja"><option value="">Pilih</option>
             <option value="5">Pekerjaan stabil lebih dari 5 tahun</option>
@@ -1397,7 +1399,7 @@ function buatPayload(){
 /* urutan pindah isian dengan tombol Tab / Enter (seperti aplikasi lama) */
 var URUTAN={
   1:["btnBrowse","fTgl","fJumlah","fTujuan","fJenis","fCara","fJangka","fBungaIn","fKe","#tPinj","fRiwayat","fTunggak","w_saham","w_taman","fPersen","rTab","goS2"],
-  2:["w_tanggungan","w_tunggakan","btnPenjamin","l_kerja","l_sumber","l_tinggal","l_setuju","l_legal","l_aman","j_nama","j_legal","j_atas","j_hub","j_nomor","j_luas","j_jarak","j_nilai","j_utara","j_selatan","j_barat","j_timur","#blok:pg","#blok:pk","#blok:as","#blok:ht","goS3"],
+  2:["w_tanggungan","w_tunggakan","btnPenjamin","j_nama","j_legal","j_atas","j_hub","j_nomor","j_luas","j_jarak","j_nilai","j_utara","j_selatan","j_barat","j_timur","#blok:pg","#blok:pk","#blok:as","#blok:ht","goS3"],
   3:["btnSimpan","btnBersih"]
 };
 function daftarFokus(){
@@ -1436,9 +1438,7 @@ function kelengkapan(){
     ["Isi suku bunga", v.bunga>0, 1, "fBungaIn"],
     ["Isi tanggal mengajukan", !!$("fTgl").value, 1, "fTgl"],
     ["Pilih riwayat bayar di CU (lihat RDP)", $("fRiwayat").value!=="", 1, "fRiwayat"],
-    ["Isi penghasilan per bulan", pg>0, 2, "w_pg_gaji"],
-    ["Pilih pekerjaan pemohon", !!$("l_kerja").value, 2, "l_kerja"],
-    ["Pilih sumber pendapatan", !!$("l_sumber").value, 2, "l_sumber"]
+    ["Isi penghasilan per bulan", pg>0, 2, "w_pg_gaji"]
   ];
 }
 function bukaStep(n){
@@ -1956,7 +1956,8 @@ function dokTpl(key,p){
   return "<div class='xl-wrap'><div class='xl2box' style='--z:"+zoom.toFixed(4)+"'>"+box.innerHTML+"</div></div>";
 }
 var IKON_PRINT="<svg aria-hidden='true' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9V3h12v6'/><rect x='3' y='9' width='18' height='8' rx='2'/><path d='M6 14h12v7H6z'/></svg>";
-var CETAK=[["form","Formulir Permohonan Kredit"],["pandu","Panduan Wawancara"],["aset","Laporan Aset & Penghasilan"],["annu","Jadwal Annuitas"],["menu","Jadwal Angsuran Menurun"],["slip","SLIP Pencairan Pinjaman"],["spp","Surat Perjanjian Pinjaman"],["sph","Surat Pengakuan Hutang"],["kuasa","Surat Kuasa Penarikan Simpanan"],["a5c","Analisis 5C"],["p100","Pernyataan Pinjaman di atas 100 Juta"],["pspa","Pernyataan Ahli Waris (usia 66–70)"],["svtanah","Survei Jaminan Tanah & Rumah"],["svkebun","Survei Jaminan Kebun"],["foto","Foto & Peta Barang Jaminan"],["resume","Resume Pengajuan"],["ba","Berita Acara Komite"],["hadir","Daftar Hadir Komite"],["kep","Keputusan Komite Kredit"]];
+var KELOMPOK_CETAK=[["Formulir dan jadwal",["form","aset","annu","menu","resume"]],["Pencairan dan perjanjian",["slip","spp","sph","kuasa","p100","pspa"]],["Survei jaminan",["svtanah","svkebun","foto"]],["Komite kredit",["a5c","ba","hadir","kep"]]];
+var CETAK=[["form","Formulir Permohonan Kredit"],["aset","Laporan Aset & Penghasilan"],["annu","Jadwal Annuitas"],["menu","Jadwal Angsuran Menurun"],["slip","SLIP Pencairan Pinjaman"],["spp","Surat Perjanjian Pinjaman"],["sph","Surat Pengakuan Hutang"],["kuasa","Surat Kuasa Penarikan"],["a5c","Analisis 5C"],["p100","Pernyataan Pinjaman > 100 Juta"],["pspa","Pernyataan Ahli Waris"],["svtanah","Survei Jaminan Tanah & Rumah"],["svkebun","Survei Jaminan Kebun"],["foto","Foto & Peta Barang Jaminan"],["resume","Resume Pengajuan"],["ba","Berita Acara Komite"],["hadir","Daftar Hadir Komite"],["kep","Keputusan Komite Kredit"]];
 var RVJAD={docLive:"",docBerkas:""};
 function rvJml(rows){ return rows.reduce(function(s,r){ return s+(r[1]||0); },0); }
 function rvList(rows,total,lblTotal){
@@ -2039,8 +2040,7 @@ function ringkasan(p,target){
 }
 
 function berkasHtml(target,p){
-  var cetak=isAdmin()?"<div class='card rv-cetak noprint'><div class='card-head'><h3>Cetak berkas (print)</h3><span class='note'>Tekan salah satu tombol: jendela print terbuka. Pilih printer, atau Simpan sebagai PDF.</span></div><div class='row'>"+
-    CETAK.map(function(x){ return "<button class='btn btn-cetak' type='button' data-cetak='"+x[0]+"'>"+IKON_PRINT+x[1]+"</button>"; }).join("")+"</div>"+formTtd()+"</div>":"";
+  var cetak=isAdmin()?"<div class='card rv-cetak noprint'><div class='card-head'><h3>Cetak berkas (print)</h3><span class='note'>Tekan salah satu tombol: jendela print terbuka. Pilih printer, atau Simpan sebagai PDF.</span></div>"+KELOMPOK_CETAK.map(function(g){ return "<div class='cg'><h4>"+g[0]+"</h4><div class='cg-btn'>"+g[1].map(function(k){ var x=CETAK.filter(function(c){ return c[0]===k; })[0]; return x?"<button class='btn btn-cetak' type='button' data-cetak='"+x[0]+"'>"+IKON_PRINT+"<span>"+x[1]+"</span></button>":""; }).join("")+"</div></div>"; }).join("")+formTtd()+"</div>":"";
   return cetak+ringkasan(p,target);
 }
 function renderLive(){ var el=$("docLive"); if(el) el.innerHTML=berkasHtml("docLive",buatPayload()); }
@@ -2148,9 +2148,9 @@ function analisis5c(p,n,db){
   var ctx={p:p,w:w,l:w.lapangan||{},set:set,angsBaru:angsBaru,angsLain:angsLain,penghasilan:penghasilan,dsr:dsr,bersih:bersih,usiaLunas:usiaLunas};
   var rinci=BUTIR.map(function(b){
     var mx=Math.max.apply(null,b.o.map(function(o){ return o[1]; })), au=b.auto?b.auto(ctx):null, v=null, src="need", ket="";
-    if(n[b.k]!=null&&n[b.k]!==""){ v=+n[b.k]; src="analis"; ket=au?"Diubah analis (otomatis: "+au[0]+")":"Dinilai analis"; }
+    if(n[b.k]!=null&&n[b.k]!==""){ v=+n[b.k]; src="analis"; ket=au?"Diubah (otomatis: "+au[0]+")":"Sudah dinilai"; }
     else if(au){ v=au[0]; src="auto"; ket=au[1]; }
-    else ket="Perlu dinilai analis";
+    else ket="Perlu dinilai";
     return {k:b.k,p:b.p,t:b.t,o:b.o,mx:mx,v:v,src:src,ket:ket};
   });
   var per={}; PILAR.forEach(function(x){ per[x[0]]=0; }); rinci.forEach(function(r){ per[r.p]+=r.v||0; });
@@ -2168,7 +2168,7 @@ var sel5c=null;
 function render5c(){
   var rows=S.peng.map(function(r){ return {r:r,x:hasil5c(r)}; }).sort(function(a,b){ return (b.r.data.dibuat||"").localeCompare(a.r.data.dibuat||""); });
   var c=function(f){ return rows.filter(f).length; };
-  $("tiles5c").innerHTML="<div class='tile t-nil'><b>"+c(function(o){ return !o.x.isGugur&&o.x.belum; })+"</b><span>Perlu dinilai analis</span></div>"+
+  $("tiles5c").innerHTML="<div class='tile t-nil'><b>"+c(function(o){ return !o.x.isGugur&&o.x.belum; })+"</b><span>Perlu dinilai</span></div>"+
     "<div class='tile t-ok'><b>"+c(function(o){ return !o.x.isGugur&&!o.x.belum&&o.x.hasil!=="tolak"; })+"</b><span>Disetujui (semua kelompok)</span></div>"+
     "<div class='tile t-bad'><b>"+c(function(o){ return o.x.isGugur||(!o.x.belum&&o.x.hasil==="tolak"); })+"</b><span>Ditolak atau gugur</span></div>"+
     "<div class='tile t-info'><b>"+c(function(o){ return !S.kep[o.r.id]; })+"</b><span>Belum diputuskan komite</span></div>";
@@ -2185,7 +2185,7 @@ function detail5c(){
   if(!r){ $("d5c").innerHTML=""; return; }
   var d=r.data, n=S.nilai[r.id]||(S.nilai[r.id]={}), x=hasil5c(r), kp=S.kep[r.id]||{hasil:"",plafon:d.jumlah,catatan:"",oleh:S.user.nama}, h=HASIL[x.hasil];
   var alasan=x.isGugur?"Gugur karena: "+x.gugur.filter(function(g){ return !g.lolos; }).map(function(g){ return g.nama.toLowerCase()+" ("+g.nilai+")"; }).join("; ")+"."
-    :(x.belum?x.belum+" butir masih perlu dinilai analis (tanda kuning). Skor di atas masih sementara. ":"")+(x.hilang.length?"Poin terbesar yang hilang: "+x.hilang.map(function(y){ return y.t.toLowerCase()+" (−"+(Math.round(y.h*10)/10).toString().replace(".",",")+")"; }).join("; ")+".":(x.belum?"":"Semua butir mendapat nilai penuh."));
+    :(x.belum?x.belum+" butir masih perlu dinilai (tanda kuning). Skor di atas masih sementara. ":"")+(x.hilang.length?"Poin terbesar yang hilang: "+x.hilang.map(function(y){ return y.t.toLowerCase()+" (−"+(Math.round(y.h*10)/10).toString().replace(".",",")+")"; }).join("; ")+".":(x.belum?"":"Semua butir mendapat nilai penuh."));
   var pilarH=PILAR.map(function(pl){
     var items=x.rinci.filter(function(i){ return i.p===pl[0]; });
     return "<div class='pilar'><div class='pilar-h'><span>"+pl[1]+"</span><span class='num'>"+num(Math.round(x.per[pl[0]]*10)/10)+" / "+MAKS[pl[0]]+"</span></div>"+items.map(function(i){
@@ -2240,7 +2240,7 @@ function renderBeranda(){
   var c=function(f){ return rows.filter(f).length; };
   var belumImpor=null;
   $("berandaSub").textContent="Masuk sebagai "+S.user.nama+". Ringkasan pengajuan yang sudah diimpor di perangkat ini.";
-  var t=[["Belum selesai diproses",c(function(o){ return !o.r.selesai; }),"t-info","impor"],["Perlu dinilai analis (5C)",c(function(o){ return !o.x.isGugur&&o.x.belum; }),"t-nil","analisa"],
+  var t=[["Belum selesai diproses",c(function(o){ return !o.r.selesai; }),"t-info","impor"],["Perlu dinilai (5C)",c(function(o){ return !o.x.isGugur&&o.x.belum; }),"t-nil","analisa"],
     ["Belum diputuskan komite",c(function(o){ return !S.kep[o.r.id]; }),"t-warn","analisa"],["Anggota baru menunggu No. BA",S.baru.filter(function(b){ return !b.selesai; }).length,"t-bad","baru"]];
   $("berandaTiles").innerHTML=t.map(function(x){ return "<button type='button' class='tile "+x[2]+"' data-go-v='"+x[3]+"' style='text-align:left;cursor:pointer;font:inherit'><b>"+x[1]+"</b><span>"+x[0]+"</span></button>"; }).join("");
   var todo=[];
