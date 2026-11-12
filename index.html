@@ -545,8 +545,9 @@ label.f{font-weight:600;color:#44544d}
         <label class="f">Batas timur<input type="text" id="j_timur"></label>
       </div>
     </div>
+    <div class="card keu-info" id="keuInfo"><h3>Keuangan anggota (diisi admin)</h3><p class="note">Penghasilan, pengeluaran, aset, dan hutang diisi admin setelah pengajuan masuk: menu <b>Impor Pengajuan</b> &gt; <b>Lihat</b> &gt; <b>Lihat &amp; cetak berkas</b> &gt; <b>Isi keuangan anggota</b>.</p></div>
     <div class="cols" id="wawBlok" hidden></div>
-    <div class="cols" hidden>
+    <div class="cols" id="wawBersih" hidden>
       <div class="card"><h3>Aset bersih</h3><table class="wt"><tr class="tot"><td>Aset dikurangi hutang</td><td><input id="w_asetbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
       <div class="card"><h3>Penghasilan bersih</h3><table class="wt"><tr class="tot"><td>Penghasilan dikurangi pengeluaran</td><td><input id="w_hasilbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
     </div>
@@ -1207,6 +1208,7 @@ function masuk(u){
   document.querySelectorAll("#menu .staf-grp").forEach(function(el){ el.hidden=!isAdmin(); });
   document.querySelectorAll(".hanya-admin").forEach(function(el){ el.hidden=!isAdmin(); });
   document.querySelectorAll("#menu .admin").forEach(function(el){ el.hidden=!isAdmin(); });
+  $("wawBlok").hidden=!isAdmin(); $("wawBersih").hidden=!isAdmin(); $("keuInfo").hidden=isAdmin();
   infoFolder(); infoAnggota(); hitungBadge();
   buka(S.view && bolehLihat(S.view) ? S.view : (isAdmin()?"beranda":"pengajuan"));
 }
