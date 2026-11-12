@@ -173,7 +173,21 @@ details summary{cursor:pointer;font-weight:600;color:var(--accent)}
 .empty{color:var(--muted);padding:12px;font-size:14px}
 
 dialog{border:0;border-radius:12px;padding:0;max-width:96vw;width:640px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.sorot{outline:3px solid var(--warn,#a2650a)!important;outline-offset:2px;transition:outline-color .3s}
 dialog::backdrop{background:rgba(15,25,20,.45)}
+.pd-alur{list-style:none;margin:0 0 14px;padding:0;counter-reset:pd}
+.pd-alur li{counter-increment:pd;position:relative;padding:8px 0 8px 40px;border-bottom:1px solid var(--line,#e3e8e5)}
+.pd-alur li:last-child{border-bottom:0}
+.pd-alur li::before{content:counter(pd);position:absolute;left:0;top:8px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.pd-alur b{display:block}.pd-alur span{font-size:13px;color:var(--muted,#5b6b63)}
+.pd-menu{width:100%;border-collapse:collapse;font-size:13px}.pd-menu td{padding:5px 6px;border-top:1px solid var(--line,#e3e8e5);vertical-align:top}.pd-menu td:first-child{font-weight:600;white-space:nowrap;width:1%}
+.pd-h{font-size:13px;font-weight:700;margin:4px 0 6px;color:var(--muted,#5b6b63)}
+.df .sp{flex:1}
+.pd-cek{display:flex;gap:6px;align-items:center;font-size:13px}
+.kg-list{display:flex;flex-direction:column;gap:6px}
+.kg-list button{display:flex;gap:8px;align-items:center;text-align:left;font:inherit;font-size:14px;background:var(--bad-soft,#fdecea);border:1px solid #f1c4bf;border-radius:8px;padding:8px 10px;cursor:pointer}
+.kg-list button .m{color:var(--bad,#b3261e);font-weight:700}
+.kg-list button small{margin-left:auto;color:var(--muted,#5b6b63)}
 .dh{padding:12px 16px;background:var(--accent);color:#fff;font-weight:700}
 .db{padding:14px 16px;max-height:70vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
 .df{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px;border-top:1px solid var(--line);background:#f6f8f7}
@@ -383,19 +397,19 @@ label.f{font-weight:600;color:#44544d}
       <span class="pill" id="pillFolder"><i></i><span>Kotak surat</span></span>
       <span class="pill" id="pillAnggota"><i></i><span>Daftar anggota</span></span>
       <span class="pill role" id="pillUser"></span>
-      <button class="btn small" type="button" id="btnGanti">Ganti akun</button><button class="btn small" type="button" id="btnKeluar">Keluar</button>
+      <button class="btn small" type="button" id="btnPanduan">Panduan</button><button class="btn small" type="button" id="btnGanti">Ganti akun</button><button class="btn small" type="button" id="btnKeluar">Keluar</button>
     </div>
   </div>
 </header>
 <div class="shell">
 <nav class="menu" id="menu" aria-label="Menu">
-  <button type="button" data-v="beranda" class="admin">Beranda admin</button>
-  <div class="grp staf-grp">Pengajuan</div>
-  <button type="button" data-v="pengajuan">Pengajuan Pinjaman</button>
-  <div class="grp admin">Admin</div>
-  <button type="button" data-v="impor" class="admin">Impor Pengajuan <span class="badge" id="nPeng" hidden>0</span></button>
+  <button type="button" data-v="beranda" class="admin">Beranda</button>
+  <div class="grp admin">Pengajuan</div>
+  <button type="button" data-v="impor" class="admin">Pengajuan Masuk <span class="badge" id="nPeng" hidden>0</span></button>
   <button type="button" data-v="analisa" class="admin">Analisis 5C <span class="badge" id="n5c" hidden>0</span></button>
   <button type="button" data-v="baru" class="admin">Anggota Baru <span class="badge" id="nBaru" hidden>0</span></button>
+  <button type="button" data-v="pengajuan" id="mPengajuan">Pengajuan Pinjaman</button>
+  <div class="grp admin">Data dan pengaturan</div>
   <button type="button" data-v="daftar" class="admin">Daftar Anggota</button>
   <button type="button" data-v="pengguna" class="admin">Pengguna</button>
   <button type="button" data-v="pengaturan" class="admin">Pengaturan</button>
@@ -545,7 +559,7 @@ label.f{font-weight:600;color:#44544d}
         <label class="f">Batas timur<input type="text" id="j_timur"></label>
       </div>
     </div>
-    <div class="card keu-info" id="keuInfo"><h3>Keuangan anggota (diisi admin)</h3><p class="note">Penghasilan, pengeluaran, aset, dan hutang diisi admin setelah pengajuan masuk: menu <b>Impor Pengajuan</b> &gt; <b>Lihat</b> &gt; <b>Lihat &amp; cetak berkas</b> &gt; <b>Isi keuangan anggota</b>.</p></div>
+    <div class="card keu-info" id="keuInfo"><h3>Keuangan anggota (diisi admin)</h3><p class="note">Penghasilan, pengeluaran, aset, dan hutang diisi admin setelah pengajuan masuk: menu <b>Pengajuan Masuk</b> &gt; <b>Lihat</b> &gt; <b>Lihat &amp; cetak berkas</b> &gt; <b>Isi keuangan anggota</b>.</p></div>
     <div class="cols" id="wawBlok" hidden></div>
     <div class="cols" id="wawBersih" hidden>
       <div class="card"><h3>Aset bersih</h3><table class="wt"><tr class="tot"><td>Aset dikurangi hutang</td><td><input id="w_asetbersih" class="ro num" readonly tabindex="-1"></td></tr></table></div>
@@ -584,7 +598,7 @@ label.f{font-weight:600;color:#44544d}
 
 <!-- ============ IMPOR PENGAJUAN ============ -->
 <section class="view" id="v-impor">
-  <h2>Impor Pengajuan</h2>
+  <h2>Pengajuan Masuk</h2>
   <div class="card">
     <div class="row">
       <button class="btn primary" type="button" id="btnImpPeng">Impor dari kotak surat</button>
@@ -755,9 +769,9 @@ label.f{font-weight:600;color:#44544d}
 
   <div class="card">
     <h3>C. Opsional: rekap pengajuan di Excel Master</h3>
-    <p>Berkas sudah bisa dicetak langsung dari aplikasi (Impor Pengajuan &gt; Lihat &gt; Lihat &amp; cetak berkas). Bagian ini hanya untuk yang tetap ingin menyimpan rekap atau mencetak dari Excel Master. Tombol <b>Salin</b> dan <b>Salin tabel</b> hanya menyalin data ke clipboard; file Excel tidak berubah sampai data itu ditempel di sheet Rekap Pengajuan.</p>
+    <p>Berkas sudah bisa dicetak langsung dari aplikasi (Pengajuan Masuk &gt; Lihat &gt; Lihat &amp; cetak berkas). Bagian ini hanya untuk yang tetap ingin menyimpan rekap atau mencetak dari Excel Master. Tombol <b>Salin</b> dan <b>Salin tabel</b> hanya menyalin data ke clipboard; file Excel tidak berubah sampai data itu ditempel di sheet Rekap Pengajuan.</p>
     <ol class="langkah">
-      <li>Buat sheet baru bernama <b>Rekap Pengajuan</b> (tanpa Tabel). Di menu Impor Pengajuan klik <b>Salin tabel</b>, tempel di <b>A1</b> termasuk judul kolom. Setiap ada pengajuan baru, tempel ulang dari A1.</li>
+      <li>Buat sheet baru bernama <b>Rekap Pengajuan</b> (tanpa Tabel). Di menu Pengajuan Masuk klik <b>Salin tabel</b>, tempel di <b>A1</b> termasuk judul kolom. Setiap ada pengajuan baru, tempel ulang dari A1.</li>
       <li>Unduh makro: <button class="btn small" id="btnMakro" type="button">Unduh PasangRumusRekap.bas</button></li>
       <li>Di Excel tekan Alt+F11 > File > Import File > pilih file .bas. Simpan workbook sebagai <b>.xlsm</b> (salinan, jangan menimpa file asli).</li>
       <li>Tekan Alt+F8, jalankan <code>PasangRumusRekap</code> <b>satu kali</b>. Makro mengganti sel isian (nama, jumlah, jangka, bunga, tabungan, modal, aset, hutang, penghasilan, pengeluaran, jaminan) dengan rumus yang membaca sheet Rekap Pengajuan. Untuk sel jaminan, jika staf tidak mengisi, rumus lama (ambil dari Db) tetap dipakai.</li>
@@ -848,6 +862,16 @@ label.f{font-weight:600;color:#44544d}
   <div class="df"><button class="btn" type="button" id="dSalin">Salin baris (Excel)</button><button class="btn" type="button" id="dBerkas">Lihat &amp; cetak berkas</button><button class="btn" type="button" id="d5cBtn">Buka Analisis 5C</button><button class="btn primary" type="button" id="dTutup">Tutup</button></div>
 </dialog>
 
+<dialog id="dlgPanduan" style="width:min(620px,96vw)">
+  <div class="dh" id="pdJudul">Panduan</div>
+  <div class="db" id="pdIsi"></div>
+  <div class="df"><label class="pd-cek"><input type="checkbox" id="pdOff"> Jangan tampilkan otomatis saat masuk</label><span class="sp"></span><button class="btn primary" type="button" id="pdTutup">Mengerti</button></div>
+</dialog>
+<dialog id="dlgKurang" style="width:min(460px,94vw)">
+  <div class="dh" id="kgJudul">Ada isian yang terlewat</div>
+  <div class="db"><p id="kgTeks" class="note" style="margin-top:0"></p><div id="kgList" class="kg-list"></div></div>
+  <div class="df"><button class="btn" type="button" id="kgLanjut">Lanjut dulu</button><button class="btn primary" type="button" id="kgIsi">Isi sekarang</button></div>
+</dialog>
 <dialog id="dlgTanya" style="width:440px">
   <div class="dh">Konfirmasi</div>
   <div class="db"><p id="tanyaTeks"></p><div id="tanyaIsi"></div></div>
@@ -1208,9 +1232,65 @@ function masuk(u){
   document.querySelectorAll("#menu .staf-grp").forEach(function(el){ el.hidden=!isAdmin(); });
   document.querySelectorAll(".hanya-admin").forEach(function(el){ el.hidden=!isAdmin(); });
   document.querySelectorAll("#menu .admin").forEach(function(el){ el.hidden=!isAdmin(); });
+  $("mPengajuan").textContent=isAdmin()?"Buat pengajuan sendiri":"Pengajuan Pinjaman";
+  document.querySelector("#v-pengajuan > .card-head h2").textContent=isAdmin()?"Buat pengajuan sendiri":"Pengajuan Pinjaman";
+  if(masuk._peran!==u.peran){ S.view=""; } masuk._peran=u.peran;
   $("wawBlok").hidden=!isAdmin(); $("wawBersih").hidden=!isAdmin(); $("keuInfo").hidden=isAdmin();
   infoFolder(); infoAnggota(); hitungBadge();
   buka(S.view && bolehLihat(S.view) ? S.view : (isAdmin()?"beranda":"pengajuan"));
+  panduanOtomatis();
+}
+/* panduan saat masuk */
+var PANDUAN={
+  staf:{judul:"Panduan staf lapangan",alur:[
+    ["Data pinjaman","Tekan Cari anggota, isi jumlah, tujuan, jenis pinjaman, cara bayar, jangka waktu, bunga, dan riwayat bayar (lihat RDP)."],
+    ["Jaminan","Pilih penjamin simpanan jika ada, lalu isi barang jaminan: nama, bukti kepemilikan, atas nama, luas, nilai taksiran, dan batas-batas."],
+    ["Periksa & kirim","Tekan Lihat Formulir Permohonan untuk mengecek. Pastikan semua Kelengkapan bertanda ✓, lalu tekan Simpan dan kirim pengajuan."],
+    ["Pastikan terkirim","Lihat Riwayat pengiriman di bawah. Jika kotak surat tidak terjangkau, file diunduh: kirim file itu ke admin atau tekan Kirim ulang."]],
+   menu:[["Pengajuan Pinjaman","Satu-satunya menu staf: mengisi dan mengirim pengajuan ke admin."],["Ganti akun","Pindah ke akun lain dengan PIN, isian tidak hilang."],["Panduan","Membuka panduan ini kapan saja."]],
+   catatan:"Isian bertanda * wajib. Jika ada yang terlewat, aplikasi akan menunjukkan isian mana yang belum diisi."},
+  admin:{judul:"Panduan admin",alur:[
+    ["Terima pengajuan","Menu Pengajuan Masuk: tekan Impor dari kotak surat. Pengajuan baru dari staf masuk ke daftar."],
+    ["Isi keuangan anggota","Tekan Lihat pada pengajuan, lalu isi penghasilan, pengeluaran, aset, dan hutang anggota."],
+    ["Nilai Analisis 5C","Menu Analisis 5C: lengkapi butir bertanda kuning. Periksa aturan gugur dan skor akhir."],
+    ["Keputusan komite","Di Analisis 5C, pilih keputusan (disetujui atau ditolak), plafon, dan catatan, lalu simpan."],
+    ["Cetak berkas","Pengajuan Masuk > Lihat > Lihat & cetak berkas: formulir, jadwal, slip, SPP, SPH, kuasa, 5C, dan lainnya."]],
+   menu:[["Beranda","Ringkasan dan daftar pekerjaan yang perlu ditindaklanjuti."],["Pengajuan Masuk","Menerima pengajuan staf, mengisi keuangan, mencetak berkas."],["Analisis 5C","Menilai kelayakan dan mencatat keputusan komite."],["Anggota Baru","Calon anggota yang menunggu No. BA."],["Buat pengajuan sendiri","Admin mengisi pengajuan langsung jika tidak ada staf."],["Daftar Anggota","Memuat data anggota dari CSV sheet Db dan membuat file untuk staf."],["Pengguna","Menambah akun staf dan mengganti PIN."],["Pengaturan","Folder kotak surat, bobot 5C, dan aturan gugur."],["Panduan Excel","Cara memindahkan data dari dan ke Excel."]],
+   catatan:"Ikuti urutan di atas. Berkas sebaiknya dicetak setelah keuangan, Analisis 5C, dan keputusan komite selesai."}
+};
+function bukaPanduan(){
+  var p=PANDUAN[isAdmin()?"admin":"staf"];
+  $("pdJudul").textContent=p.judul;
+  $("pdIsi").innerHTML="<div class='pd-h'>Tahapan kerja yang benar</div><ol class='pd-alur'>"+p.alur.map(function(a){ return "<li><b>"+esc(a[0])+"</b><span>"+esc(a[1])+"</span></li>"; }).join("")+"</ol>"+
+    "<div class='pd-h'>Fungsi menu</div><table class='pd-menu'>"+p.menu.map(function(m){ return "<tr><td>"+esc(m[0])+"</td><td>"+esc(m[1])+"</td></tr>"; }).join("")+"</table>"+
+    "<p class='note' style='margin-bottom:0'>"+esc(p.catatan)+"</p>";
+  var off=(S.pdOff||{})[S.user.u]; $("pdOff").checked=!!off;
+  $("dlgPanduan").showModal(); $("pdTutup").focus();
+}
+async function panduanOtomatis(){
+  if(S.pdOff===undefined){ try{ S.pdOff=(await KV.get("panduanOff"))||{}; }catch(e){ S.pdOff={}; } }
+  if(!S.pdOff[S.user.u]) bukaPanduan();
+}
+$("btnPanduan").addEventListener("click",bukaPanduan);
+$("pdTutup").addEventListener("click",function(){ $("dlgPanduan").close(); });
+$("pdOff").addEventListener("change",async function(){ S.pdOff=S.pdOff||{}; if(this.checked) S.pdOff[S.user.u]=true; else delete S.pdOff[S.user.u]; try{ await KV.set("panduanOff",S.pdOff); }catch(e){} });
+/* pop up isian terlewat */
+function popKurang(kur,opsi){
+  opsi=opsi||{};
+  return new Promise(function(res){
+    var d=$("dlgKurang");
+    $("kgJudul").textContent=opsi.judul||"Ada isian yang terlewat";
+    $("kgTeks").textContent=opsi.teks||("Masih ada "+kur.length+" isian wajib yang belum diisi. Tekan salah satu untuk langsung ke isian itu.");
+    $("kgList").innerHTML=kur.map(function(x,i){ return "<button type='button' data-i='"+i+"'><span class='m'>✗</span>"+esc(x[0])+(x[2]?"<small>langkah "+x[2]+"</small>":"")+"</button>"; }).join("");
+    $("kgLanjut").hidden=!opsi.bolehLanjut; $("kgLanjut").textContent=opsi.lanjutLabel||"Lanjut dulu";
+    function ke(x){ if(x[2]&&S.step!==x[2]) bukaStep(x[2]); var el=$(x[3]); if(el){ setTimeout(function(){ el.scrollIntoView({block:"center"}); el.focus(); if(el.classList) { el.classList.add("sorot"); setTimeout(function(){ el.classList.remove("sorot"); },2200); } },40); } }
+    function selesai(v){ d.onclose=null; try{ d.close(); }catch(e){} res(v); }
+    $("kgList").onclick=function(e){ var b=e.target.closest("button[data-i]"); if(!b) return; var x=kur[+b.dataset.i]; selesai(false); ke(x); };
+    $("kgIsi").onclick=function(){ selesai(false); ke(kur[0]); };
+    $("kgLanjut").onclick=function(){ selesai(true); };
+    d.onclose=function(){ res(false); };
+    d.showModal(); $("kgIsi").focus();
+  });
 }
 $("btnGanti").addEventListener("click",function(){
   var lain=S.users.filter(function(y){ return !S.user||y.u!==S.user.u; });
@@ -1497,7 +1577,16 @@ function bukaStep(n){
   petunjuk(); window.scrollTo(0,0);
 }
 document.querySelectorAll("#steps button").forEach(function(b){ b.addEventListener("click",function(){ bukaStep(+b.dataset.s); }); });
-document.querySelectorAll("[data-go]").forEach(function(b){ b.addEventListener("click",function(){ bukaStep(+b.dataset.go); var f=daftarFokus()[0]; if(f) setTimeout(function(){ f.focus(); },30); }); });
+document.querySelectorAll("[data-go]").forEach(function(b){ b.addEventListener("click",async function(){
+  var ke=+b.dataset.go;
+  if(ke>S.step){
+    var kur=kelengkapan().filter(function(x){ return !x[1]&&x[2]<ke; });
+    if(kur.length && !(await popKurang(kur,{bolehLanjut:true,lanjutLabel:"Lanjut, isi nanti",teks:"Masih ada "+kur.length+" isian wajib yang belum diisi. Pengajuan tidak bisa dikirim sebelum semuanya lengkap."}))) return;
+    if(ke===3 && S.step===2 && !$("j_nama").value.trim() && !$("w_penjamin").value.trim()){
+      if(!(await popKurang([["Barang jaminan belum diisi",false,2,"j_nama"]],{judul:"Jaminan masih kosong",teks:"Penjamin simpanan dan barang jaminan belum diisi. Jika pinjaman ini memang tanpa jaminan, tekan Lanjut tanpa jaminan.",bolehLanjut:true,lanjutLabel:"Lanjut tanpa jaminan"}))) return;
+    }
+  }
+  bukaStep(ke); var f=daftarFokus()[0]; if(f) setTimeout(function(){ f.focus(); },30); }); });
 function petunjuk(){
   var k=kelengkapan(), s1=k.filter(function(x){ return x[2]===1; }), s2=k.filter(function(x){ return x[2]===2; });
   var ok1=s1.every(function(x){ return x[1]; }), ok2=s2.every(function(x){ return x[1]; });
@@ -1534,7 +1623,7 @@ async function simpanRiwayat(r){ S.riwayat.unshift(r); if(S.riwayat.length>150) 
 
 $("btnSimpan").addEventListener("click",async function(){
   var kur=kelengkapan().filter(function(x){ return !x[1]; });
-  if(kur.length){ toast("Belum lengkap. "+kur.map(function(x){ return x[0]; }).join(", ")+".","bad",8000); bukaStep(kur[0][2]); var el=$(kur[0][3]); if(el) el.focus(); return; }
+  if(kur.length){ popKurang(kur,{judul:"Belum bisa dikirim",teks:"Lengkapi dulu "+kur.length+" isian wajib berikut. Tekan salah satu untuk langsung ke isian itu."}); return; }
   var btn=this; btn.disabled=true;
   try{
     var izin=await pastikanIzin(), p=buatPayload(), a=S.anggota;
@@ -2233,7 +2322,7 @@ function render5c(){
   $("t5c").innerHTML=rows.length?rows.map(function(o){ var d=o.r.data;
     return "<tr class='click"+(o.r.id===sel5c?" sel":"")+"' data-id='"+esc(o.r.id)+"' tabindex='0'><td>"+tgl(d.tgl_pengajuan)+"</td><td>"+esc(d.anggota.nama)+"<br><span class='note'>"+esc((d.kantor||{}).nama||"")+"</span></td><td class='r num'>"+rp(d.jumlah)+"</td>"+
       "<td><div class='sbar'><div class='bar'><i style='width:"+(o.x.isGugur?0:o.x.skor)+"%'></i></div><b class='num'>"+(o.x.isGugur?"—":Math.round(o.x.skor))+"</b></div></td><td>"+chip5c(o.x)+"</td><td>"+(S.kep[o.r.id]?esc(S.kep[o.r.id].hasil):"<span class='note'>Belum</span>")+"</td></tr>"; }).join("")
-    :"<tr><td colspan='6' class='empty'>Belum ada pengajuan. Impor dulu di menu Impor Pengajuan.</td></tr>";
+    :"<tr><td colspan='6' class='empty'>Belum ada pengajuan. Impor dulu di menu Pengajuan Masuk.</td></tr>";
   document.querySelectorAll("#t5c tr.click").forEach(function(tr){ var f=function(){ sel5c=tr.dataset.id; render5c(); $("d5c").scrollIntoView({block:"start"}); }; tr.onclick=f; tr.onkeydown=function(e){ if(e.key==="Enter") f(); }; });
   if(!sel5c||!S.peng.some(function(r){ return r.id===sel5c; })){ var f0=rows.filter(function(o){ return !o.x.isGugur&&o.x.belum; })[0]||rows[0]; sel5c=f0?f0.r.id:null; }
   detail5c();
@@ -2305,10 +2394,14 @@ function renderBeranda(){
   if(!S.folderPath&&!S.handle) todo.push(["Atur folder kotak surat","pengaturan"]);
   if(!S.daftar.length) todo.push(["Muat daftar anggota dari CSV sheet Db","daftar"]);
   if(S.users.filter(function(u){ return u.peran==="staf"; }).length===0) todo.push(["Buat akun staf lapangan","pengguna"]);
-  todo.push(["Cek kiriman baru di kotak surat","impor"]);
+  if(t[1][1]) todo.push([t[1][1]+" pengajuan perlu dinilai di Analisis 5C","analisa"]);
+  if(t[2][1]) todo.push([t[2][1]+" pengajuan menunggu keputusan komite","analisa"]);
+  if(t[3][1]) todo.push([t[3][1]+" calon anggota baru menunggu No. BA","baru"]);
+  todo.push(["Cek pengajuan baru dari staf (kotak surat)","impor"]);
+  todo.push(["Buat pengajuan sendiri (jika admin juga mengisi)","pengajuan"]);
   $("berandaTodo").innerHTML=todo.map(function(x){ return "<div><button class='btn small' type='button' data-go-v='"+x[1]+"'>Buka</button> "+esc(x[0])+"</div>"; }).join("");
   rows.sort(function(a,b){ return (b.r.data.dibuat||"").localeCompare(a.r.data.dibuat||""); });
-  $("berandaTbl").innerHTML=rows.length?rows.slice(0,6).map(function(o){ var d=o.r.data; return "<tr class='click' data-id='"+esc(o.r.id)+"'><td>"+tgl(d.tgl_pengajuan)+"</td><td>"+esc(d.anggota.nama)+"<br><span class='note'>"+esc((d.kantor||{}).nama||"")+"</span></td><td class='r num'>"+rp(d.jumlah)+"</td><td>"+chip5c(o.x)+"</td></tr>"; }).join(""):"<tr><td colspan='4' class='empty'>Belum ada pengajuan yang diimpor.</td></tr>";
+  $("berandaTbl").innerHTML=rows.length?rows.slice(0,6).map(function(o){ var d=o.r.data; return "<tr class='click' data-id='"+esc(o.r.id)+"'><td>"+tgl(d.tgl_pengajuan)+"</td><td>"+esc(d.anggota.nama)+"<br><span class='note'>"+esc((d.kantor||{}).nama||"")+"</span></td><td class='r num'>"+rp(d.jumlah)+"</td><td>"+chip5c(o.x)+"</td></tr>"; }).join(""):"<tr><td colspan='4' class='empty'>Belum ada pengajuan. Buka <b>Pengajuan Masuk</b> lalu tekan <b>Impor dari kotak surat</b>, atau pakai <b>Buat pengajuan sendiri</b>.</td></tr>";
   document.querySelectorAll("#v-beranda [data-go-v]").forEach(function(b){ b.onclick=function(){ buka(b.dataset.goV); }; });
   document.querySelectorAll("#berandaTbl tr.click").forEach(function(tr){ tr.onclick=function(){ sel5c=tr.dataset.id; buka("analisa"); }; });
 }
@@ -2410,7 +2503,7 @@ function renderPeng(){
     return "<tr class='"+(r.selesai?"done":"")+"'><td><input type='checkbox' data-sel='"+esc(r.id)+"' "+(r.selesai?"checked":"")+" aria-label='Tandai selesai'></td><td>"+tgl(d.tgl_pengajuan)+"</td><td>"+esc((d.kantor||{}).nama||"")+"</td><td>"+esc(d.anggota.nama)+"<br><span class='note'>"+esc(d.anggota.no_ba||"-")+"</span></td>"+
       "<td class='r num'>"+rp(d.jumlah)+"</td><td>"+esc((d.jenis_pinjaman||{}).nama)+"</td><td>"+esc(d.staf)+"</td><td><span class='chip "+k[0]+"'>"+esc(k[1])+"</span></td><td>"+chip5c(x)+"</td>"+
       "<td class='r'><button class='btn small' type='button' data-lihat='"+esc(r.id)+"'>Lihat</button> <button class='btn small' type='button' data-salin='"+esc(r.id)+"'>Salin</button></td></tr>"; }).join("")
-    :"<tr><td colspan='10' class='empty'>Belum ada pengajuan di daftar ini. Tekan Impor dari kotak surat.</td></tr>";
+    :"<tr><td colspan='10' class='empty'>Belum ada pengajuan di daftar ini. Tekan <b>Impor dari kotak surat</b> untuk mengambil kiriman staf, atau pakai menu <b>Buat pengajuan sendiri</b>.</td></tr>";
 }
 $("fltPeng").addEventListener("change",renderPeng);
 $("selDes").addEventListener("change",function(){ S.desimal=this.value; KV.set("desimal",S.desimal); });
